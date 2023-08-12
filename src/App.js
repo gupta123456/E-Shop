@@ -1,41 +1,33 @@
 import React from "react";
-import PrimarySearchAppBar from "./component/navbar/Navbar.js";
-import ColorToggleButton from "./component/toggle/toggleFilter.js";
-import MediaCard from "./component/cards/ImgCard.js";
-import {cardData} from "./data/CardData.js";
-import BasicSelect from "./component/dropdown/Dropdown.js";
-import "./assets/index.css";
+// import Login from "./components/SignIn/login";
+// import SignUp from './components/SignUp/signup';
+// import PlaceOrder from './components/PlaceOrder/placeOrder';
+import Dashboard from './component/Dashboard';
+// import AddAddress from "./components/Address/Add_Address";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+// import  Header  from "./components/Header/header";
 
-const cards = cardData;
 
-function App() {
+const App = () => {
   return (
-    <div style={{margin: 0}}>
-      <PrimarySearchAppBar />
-      <div style={{marginTop:"1em", textAlign: "center"}}>
-        <ColorToggleButton />
-      </div>
-      
-      <div style={{ marginLeft: "2em", width: "10em"}}>
-        <BasicSelect />
-      </div>
-      
-      <div style={{ margin: "2em", display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "2em"}}>
-        {cards.map((card, key) => {
-          return (
-            <div>
-          <MediaCard
-            key={key} 
-            heading={card.heading}
-            body={card.body} 
-            footer={card.footer} 
-          />
-          </div>
-          )
-        })}
-        </div>
-    </div>
+    <>
+    <BrowserRouter>    
+    {/* <Header/> */}
+       <Routes>
+       {/* <Route exact path='/login' element ={<Login />} />
+       <Route exact path='/signup' element ={<SignUp />} />
+       <Route exact path='/placeOrder' element ={<PlaceOrder />} /> */}
+       <Route exact path='/' element ={<Dashboard/>}/>
+       {/* <Route exact path='/addAddress' element ={<AddAddress />} /> */}
+       {/* <Route exact path='/placeorder' element ={<PlaceOrder />} /> 
+       <Route exact path='/product' element ={<ProductCard />} /> */}
+       {/* <Route exact path='/' element ={<Home />} /> */}
+       {/* <Route exact path='/modifyproduct' element ={<ModifyProduct />} />
+       <Route exact path='/addproduct' element ={<AddProduct />} /> */}
+     </Routes>
+     </BrowserRouter>
+    </>
   );
-}
+};
 
 export default App;

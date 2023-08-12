@@ -9,7 +9,8 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Link from '@mui/material/Link';
-import '../../assets/appbar.css';
+import Button from '@mui/material/Button';
+import '../../assets/navbar.css';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -27,6 +28,13 @@ const Search = styled('div')(({ theme }) => ({
   },
 }));
 
+const CenteredContent = styled('div')({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flex: 4,
+});
+
 const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: '100%',
@@ -41,7 +49,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -77,7 +84,8 @@ export default function PrimarySearchAppBar() {
           >
             upGrad E-Shop
           </Typography>
-          <Search alignItems="center">
+          <CenteredContent>
+          <Search sx={{ alignItems: "center", justifyContent: "center",flex: 0.7}}>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -86,13 +94,16 @@ export default function PrimarySearchAppBar() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-          <Link href="#" className='headerlinks'>Home</Link>
-          <Link href="#" className='headerlinks'>Login</Link>
-          <Link href="#" className='headerlinks'>Sign Up</Link>
-          </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+          </CenteredContent>
+            <Box sx={{ flexGrow: 1 }} />
+                <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                    <Link href="/" className='headerlinks' style={{ textDecoration: 'underline' }}>Home</Link>
+                    {/* <Link href="#" className='headerlinks'>Add Product</Link> */}
+                    <Link href='/login'  className='headerlinks' style={{ textDecoration: 'underline' }}>Login</Link>
+                    <Link  href='/signUp' className='headerlinks' style={{ textDecoration: 'underline' }}>Sign Up</Link>
+                    <Button variant="contained" className='logout' href='/'>Logout</Button>
+                </Box>
+            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
           </Box>
         </Toolbar>
       </AppBar>
