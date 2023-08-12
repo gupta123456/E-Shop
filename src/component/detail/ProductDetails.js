@@ -17,7 +17,7 @@ export default function ProductDetails(){
                 Category: Electronics
             </Typography> <br/><br/>
             <Typography variant="p" fontSize="12px"><i>A14 Bionic Display, the fastest chip in a smartphone. An edge-to-edge OLED Display</i></Typography><br/><br/>
-            <Typography variant="p" fontSize="22px" color="red"> $100000 </Typography> <br/><br/>
+            <Typography variant="p" fontSize="22px" color="red"> ₹100000 </Typography> <br/><br/>
             <div style={{ width: "20em"}}>
                 <TextField
                     margin="normal"
