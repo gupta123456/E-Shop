@@ -1,17 +1,17 @@
 import React from "react";
-import PrimarySearchAppBar from "./navbar/Navbar.js";
 import ColorToggleButton from "./toggle/toggleFilter.js";
 import MediaCard from "./cards/ImgCard.js";
 import {cardData} from "../data/CardData.js";
 import BasicSelect from "./dropdown/Dropdown.js";
 import "../assets/index.css";
+import PrimarySearchAppBar from "./navbar/Navbar.js";
 
 const cards = cardData;
 
 function Dashoard() {
   return (
     <div style={{margin: 0}}>
-      <PrimarySearchAppBar />
+      <PrimarySearchAppBar/>
       <div style={{marginTop:"1em", textAlign: "center"}}>
         <ColorToggleButton />
       </div>

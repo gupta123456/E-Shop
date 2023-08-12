@@ -97,10 +97,10 @@ export default function PrimarySearchAppBar() {
           </CenteredContent>
             <Box sx={{ flexGrow: 1 }} />
                 <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                    <Link href="/" className='headerlinks' style={{ textDecoration: 'underline' }}>Home</Link>
+                    <Link href="/dashboard" className='headerlinks' style={{ textDecoration: 'underline' }}>Home</Link>
                     {/* <Link href="#" className='headerlinks'>Add Product</Link> */}
                     <Link href='/login'  className='headerlinks' style={{ textDecoration: 'underline' }}>Login</Link>
-                    <Link  href='/signUp' className='headerlinks' style={{ textDecoration: 'underline' }}>Sign Up</Link>
+                    <Link  href='/signup' className='headerlinks' style={{ textDecoration: 'underline' }}>Sign Up</Link>
                     <Button variant="contained" className='logout' href='/'>Logout</Button>
                 </Box>
             <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
