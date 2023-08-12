@@ -1,62 +1,42 @@
 export const cardData = [
     {
         "id" : 1,
-        "heading" : "First Card",
+        "category": "apparel",
+        "heading" : "Apparel",
         "body" : "Sample Body",
-        "footer" : "Sample Footer"
+        "footer" : "Sample Footer",
+        "price" : 1000
     },
     {
         "id" : 2,
-        "heading" : "First Card",
+        "category": "electronics",
+        "heading" : "Electronics",
         "body" : "Sample Body",
-        "footer" : "Sample Footer"
-    },
+        "footer" : "Sample Footer",
+        "price" : 5000
+    },    
     {
         "id" : 3,
-        "heading" : "First Card",
+        "category": "footware",
+        "heading" : "Footware",
         "body" : "Sample Body",
-        "footer" : "Sample Footer"
+        "footer" : "Sample Footer",
+        "price" : 800
     },
     {
         "id" : 4,
-        "heading" : "First Card",
+        "category": "personal care",
+        "heading" : "Personal Care",
         "body" : "Sample Body",
-        "footer" : "Sample Footer"
+        "footer" : "Sample Footer",
+        "price" : 1200
     },
     {
         "id" : 5,
-        "heading" : "First Card",
+        "category": "electronics",
+        "heading" : "Electronics",
         "body" : "Sample Body",
-        "footer" : "Sample Footer"
-    },
-    {
-        "id" : 6,
-        "heading" : "First Card",
-        "body" : "Sample Body",
-        "footer" : "Sample Footer"
-    },
-    {
-        "id" : 7,
-        "heading" : "First Card",
-        "body" : "Sample Body",
-        "footer" : "Sample Footer"
-    },
-    {
-        "id" : 8,
-        "heading" : "First Card",
-        "body" : "Sample Body",
-        "footer" : "Sample Footer"
-    },
-    {
-        "id" : 9,
-        "heading" : "First Card",
-        "body" : "Sample Body",
-        "footer" : "Sample Footer"
-    },
-    {
-        "id" : 10,
-        "heading" : "First Card",
-        "body" : "Sample Body",
-        "footer" : "Sample Footer"
+        "footer" : "Sample Footer",
+        "price" : 10000
     }
 ]

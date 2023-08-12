@@ -5,12 +5,43 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function BasicSelect() {
-  const [age, setAge] = React.useState('');
+export default function BasicSelect(props) {
+  // eslint-disable-next-line
+  const [order, setOrder] = React.useState('');
 
   const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+    console.log(event.target.value);
+    var data = props.data;
+    if(event.target.value === "lowToHigh"){
+      data.sort(fromLowToHigh);
+      console.log("After Sorting Low to High");
+      props.updateData(data);
+    } else if(event.target.value === "highToLow"){
+      data.sort(fromHighToLow);
+      console.log("After Sorting High To Low");
+      props.updateData(data);
+    }
+  }
+
+  function fromLowToHigh(a,b){
+    if(a.price<b.price){
+      return -1;
+    }
+    if(a.price>b.price){
+      return 1;
+    }
+    return 0;
+  }
+
+  function fromHighToLow(a,b){
+    if(a.price<b.price){
+      return 1;
+    }
+    if(a.price>b.price){
+      return -1;
+    }
+    return 0;
+  }
 
   return (
     <Box>
@@ -19,13 +50,14 @@ export default function BasicSelect() {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={age}
+          value={order}
           label="Select..."
           onChange={handleChange}
         >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          <MenuItem value="default">Default</MenuItem>
+          <MenuItem value="lowToHigh">Price: Low to High</MenuItem>
+          <MenuItem value="highToLow">Price: High to Low</MenuItem>
+          <MenuItem value="latestToOldest">Newest</MenuItem>
         </Select>
       </FormControl>
     </Box>
