@@ -62,7 +62,7 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" style={{background: '#3f51b5'}}>
         <Toolbar 
         sx={{
             justifyContent: "space-between"

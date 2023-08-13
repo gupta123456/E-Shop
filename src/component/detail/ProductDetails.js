@@ -11,7 +11,7 @@ export default function ProductDetails(){
         </Grid>
         <Grid item xs={8}>
             <Typography variant="h4" gutterBottom>
-                iPhone 12 <Chip label="Available Quantity: 148" color="primary" />
+                iPhone 12 <Chip label="Available Quantity: 148" style={{ background: '#3f51b5', color: "white" }} />
             </Typography>
             <Typography variant="p">
                 Category: Electronics
@@ -31,7 +31,7 @@ export default function ProductDetails(){
                 />
             </div>
             <div style={{ width: "8em"}}>
-                <Button type="submit" fullWidth variant="contained">PLACE ORDER</Button>
+                <Button type="submit" fullWidth variant="contained" style={{ background: '#3f51b5' }}>PLACE ORDER</Button>
             </div>
         </Grid>
       </Grid>
