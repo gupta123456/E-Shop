@@ -20,7 +20,21 @@ export default function BasicSelect(props) {
       data.sort(fromHighToLow);
       console.log("After Sorting High To Low");
       props.updateData(data);
+    } else if(event.target.value === "default"){
+      data.sort(defaultSort);
+      console.log("After Sorting Default");
+      props.updateData(data);
     }
+  }
+
+  function defaultSort(a,b){
+    if(a.id<b.id){
+      return -1;
+    }
+    if(a.id>b.id){
+      return 1;
+    }
+    return 0;
   }
 
   function fromLowToHigh(a,b){

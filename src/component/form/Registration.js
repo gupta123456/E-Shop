@@ -123,6 +123,7 @@ export default function MyRegistration() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              style={{ background: '#3f51b5' }}
             >
               Sign In
             </Button>
