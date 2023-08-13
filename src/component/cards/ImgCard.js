@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Shoes from "../../img/shoes.jpg";
 
-export default function MediaCard() {
+export default function MediaCard(props) {
   return (
     <Card>
       <CardMedia
@@ -17,7 +17,7 @@ export default function MediaCard() {
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          Addidas
+          {props.heading}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Try the all new Addidas sports shoes.
