@@ -31,7 +31,7 @@ export default function ProductDetails(){
                 />
             </div>
             <div style={{ width: "8em"}}>
-                <Button type="submit" fullWidth variant="contained" style={{ background: '#3f51b5' }}>PLACE ORDER</Button>
+                <Button type="submit" fullWidth variant="contained" style={{ background: '#3f51b5' }} href='/placeOrder'>PLACE ORDER</Button>
             </div>
         </Grid>
       </Grid>

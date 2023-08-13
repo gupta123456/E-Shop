@@ -27,7 +27,7 @@ function Dashoard() {
       </div>
       
       <div style={{ margin: "2em", display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "2em"}}>
-        {data.map((card, key) => {
+        {data.map((card) => {
           return (
             <div>
               <MediaCard

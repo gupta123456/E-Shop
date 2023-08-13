@@ -30,13 +30,5 @@ export const cardData = [
         "body" : "Sample Body",
         "footer" : "Sample Footer",
         "price" : 1200
-    },
-    {
-        "id" : 5,
-        "category": "electronics",
-        "heading" : "Electronics",
-        "body" : "Sample Body",
-        "footer" : "Sample Footer",
-        "price" : 10000
     }
 ]

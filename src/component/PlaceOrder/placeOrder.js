@@ -10,8 +10,8 @@ import Container from "@material-ui/core/Container";
 import { ValidatorForm } from "react-material-ui-form-validator";
 import AddAddress from "../AddAddress/addAddress";
 import PrimarySearchAppBar from "../navbar/Navbar";
+import Box from '@mui/material/Box';
 import '../../assets/placeorder.css';
-// import ConfirmOrder from '../ConfirmOrder/confirmOrder';
 
 const styles = {
   root: {
@@ -50,7 +50,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 1,
+      step: 2,
       data: {
         email1: "",
         email2: "",
@@ -114,11 +114,6 @@ class App extends React.Component {
     let content = null;
     switch (step) {
       case 1:
-        content = (
-          <div>
-          <AddAddress/>
-          </div>
-        );
         break;
       case 2:
         content = (
@@ -147,13 +142,15 @@ class App extends React.Component {
         <PrimarySearchAppBar/>
         <Paper square className={classes.paper}>
           <div className={classes.root}>
-            <Stepper activeStep={step - 1} alternativeLabel>
-              {steps.map(label => (
-                <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
-                </Step>
-              ))}
-            </Stepper>
+            <Box>
+              <Stepper activeStep={step - 1} alternativeLabel>
+                {steps.map(label => (
+                  <Step key={label}>
+                    <StepLabel>{label}</StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
+            </Box>
             <ValidatorForm
               ref={r => {
                 this.form = r;
@@ -162,7 +159,7 @@ class App extends React.Component {
               instantValidate
             >
               <Container>{this.renderStep()}</Container>
-                <Toolbar class='buttons'>
+                <Toolbar className='buttons'>
                   <Button
                     onClick={this.prevStep}
                     style={{ alignItems: "center", justifyContent: "center"}}
