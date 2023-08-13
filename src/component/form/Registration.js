@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {pink} from '@mui/material/colors';
+import axios from 'axios';
 
 function Copyright(props) {
   return (
@@ -27,17 +28,34 @@ function Copyright(props) {
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
+async function userRegistrationRequest(registrationRequestData){
+  const REGISTRATION_URL = "http://localhost:8080/api/auth/signup";
+  console.log("Registration Data :: ");
+  console.log(registrationRequestData);
+  try{
+    var response = await axios.post(REGISTRATION_URL, registrationRequestData);
+    console.log(response.data);
+  }catch(err){
+    console.log(err.response.data);
+  }
+}
+
 const defaultTheme = createTheme();
 
 export default function MyRegistration() {
   const color = pink[500];
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    var registrationRequestData = {
+      firstName: data.get('firstName'),
+      lastName: data.get('lastName'),
       email: data.get('email'),
       password: data.get('password'),
-    });
+      contactNumber: data.get('contactNumber')
+    };
+    userRegistrationRequest(registrationRequestData);
   };
 
   return (
@@ -113,7 +131,7 @@ export default function MyRegistration() {
               margin="normal"
               required
               fullWidth
-              name="mobile"
+              name="contactNumber"
               label="Contact Number"
               id="contactNumber"
               autoComplete="contact-number"

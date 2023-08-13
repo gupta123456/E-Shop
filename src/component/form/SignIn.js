@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {pink} from '@mui/material/colors';
+import axios from 'axios';
 
 function Copyright(props) {
   return (
@@ -34,12 +35,28 @@ export default function MySignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
+    var signInRequestData = {
+      username: data.get('email'),
       password: data.get('password'),
-    });
+    };
+    userSignInRequest(signInRequestData);
   };
 
+  const userSignInRequest = async(signInRequestData) => {
+    const SIGNIN_URL = "http://localhost:8080/api/auth/signin";
+    console.log("SignIn Data :: ");
+    console.log(signInRequestData);
+    try{
+      var response = await axios.post(SIGNIN_URL, signInRequestData);
+      console.log(response.data);
+      sessionStorage.setItem("token", response.data.token);
+      window.location.replace("/dashboard");
+    }catch(err){
+      console.log(err.response);
+    }
+    console.log("Session Storage Token :: "+ sessionStorage.getItem("token"));
+  }
+ 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
