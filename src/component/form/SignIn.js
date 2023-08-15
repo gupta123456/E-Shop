@@ -46,6 +46,7 @@ export default function MySignIn() {
     const SIGNIN_URL = "http://localhost:8080/api/auth/signin";
     console.log("SignIn Data :: ");
     console.log(signInRequestData);
+    sessionStorage.setItem('user',signInRequestData.username);
     try{
       var response = await axios.post(SIGNIN_URL, signInRequestData);
       console.log(response.data);

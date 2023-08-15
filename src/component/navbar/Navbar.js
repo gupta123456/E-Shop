@@ -12,6 +12,17 @@ import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import '../../assets/navbar.css';
 
+const token = sessionStorage.getItem('token');
+var checkLogIn = false;
+if(token){
+  checkLogIn = true;
+}
+
+const logout = () =>{
+  sessionStorage.removeItem('token');
+  window.location.replace("/");
+}
+
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -58,6 +69,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+
 export default function PrimarySearchAppBar() {
 
   return (
@@ -99,9 +111,9 @@ export default function PrimarySearchAppBar() {
                 <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                     <Link href="/dashboard" className='headerlinks' style={{ textDecoration: 'underline' }}>Home</Link>
                     {/* <Link href="#" className='headerlinks'>Add Product</Link> */}
-                    <Link href='/'  className='headerlinks' style={{ textDecoration: 'underline' }}>Login</Link>
-                    <Link  href='/signup' className='headerlinks' style={{ textDecoration: 'underline' }}>Sign Up</Link>
-                    <Button variant="contained" className='logout' href='/'>Logout</Button>
+                    {!checkLogIn ? <Link href='/'  className='headerlinks' style={{ textDecoration: 'underline' }}>Login</Link> : ''}
+                    {!checkLogIn ? <Link  href='/signup' className='headerlinks' style={{ textDecoration: 'underline' }}>Sign Up</Link> : ''}
+                    {checkLogIn ? <Button variant="contained" className='logout' href='/' onClick={logout}>Logout</Button> : ''}
                 </Box>
             <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
           </Box>

@@ -1,187 +1,67 @@
-import React from "react";
-import { withStyles } from "@material-ui/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Container from "@material-ui/core/Container";
-import { ValidatorForm } from "react-material-ui-form-validator";
-import AddAddress from "../AddAddress/addAddress";
-import PrimarySearchAppBar from "../navbar/Navbar";
+import * as React from 'react';
 import Box from '@mui/material/Box';
-import '../../assets/placeorder.css';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Button from '@mui/material/Button';
+import PrimarySearchAppBar from "../navbar/Navbar";
+import AddAddress from "../AddAddress/addAddress";
+import Toolbar from "@material-ui/core/Toolbar";
+import { Container } from '@mui/system';
 
-const styles = {
-  root: {
-    flexGrow: 1,
-    width: "100%"
-  },
-  menuButton: {
-    marginRight: 8
-  },
-  title: {
-    flexGrow: 1
-  },
-  appBarBottom: {
-    top: "auto",
-    bottom: 0
-  },
-  grow: {
-    flexGrow: 1
-  },
-  paper: {
-    paddingBottom: 90
-  },
-  text: {
-    padding: 2
-  },
-  backButton: {
-    marginRight: 8
-  },
-  instructions: {
-    marginTop: 8,
-    marginBottom: 8
-  }
-};
+const steps = ['Items', 'Select Address', 'Confirm Order'];
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      step: 2,
-      data: {
-        email1: "",
-        email2: "",
-        email3: ""
-      },
-      disabled: false,
-      captchaValid: false,
-      submitted: false
-    };
-  }
-  getSteps = () => {
-    return [
-      "Items",
-      "Select Address",
-      "Confirm"
-    ];
+export default function HorizontalLinearStepper() {
+  const [activeStep, setActiveStep] = React.useState(1);
+  const [skipped, setSkipped] = React.useState(new Set());
+
+  const handleNext = () => {
+    let newSkipped = skipped;
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setSkipped(newSkipped);
   };
 
-  onChange = event => {
-    const { data } = this.state;
-    data[event.target.name] = event.target.value;
-    this.setState({ data });
-  };
-
-  submit = () => {
-    this.form.submit();
-  };
-
-  handleSubmit = () => {
-    this.setState({ submitted: true }, () => {
-      setTimeout(() => this.setState({ submitted: false }), 5000);
-    });
-  };
-
-  prevStep = () => {
-    let { step } = this.state;
-    if (step > 1) {
-      step--;
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    console.log(activeStep);
+    if(activeStep === 1){
+      window.location.replace('productDetails');
     }
-    this.setState({ step });
   };
 
-  nextStep = () => {
-    this.form.isFormValid(false).then(isValid => {
-      if (isValid) {
-        let { step } = this.state;
-        if (step < 3) {
-          step++;
-        }
-        this.setState({ step });
-      }
-    });
-  };
-
-  validatorListener = result => {
-    this.setState({ disabled: !result });
-  };
-
-  renderStep = () => {
-    const { step } = this.state;
-    let content = null;
-    switch (step) {
-      case 1:
-        break;
-      case 2:
-        content = (
-          <AddAddress/>
-        );
-        break;
-      case 3:
-        // content = (
-        //   <div>
-        //     {/* <ConfirmOrder/> */}
-        //   </div>
-        // );
-        break;
-      default:
-        content = <div>Error</div>;
-        break;
-    }
-    return content;
-  };
-  render() {
-    const { classes } = this.props;
-    const { step, disabled, submitted, captchaValid } = this.state;
-    const steps = this.getSteps();
-    return (
-      <div className={classes.root}>
-        <PrimarySearchAppBar/>
-        <Paper square className={classes.paper}>
-          <div className={classes.root}>
-            <Box>
-              <Stepper activeStep={step - 1} alternativeLabel>
-                {steps.map(label => (
-                  <Step key={label}>
-                    <StepLabel>{label}</StepLabel>
-                  </Step>
-                ))}
-              </Stepper>
-            </Box>
-            <ValidatorForm
-              ref={r => {
-                this.form = r;
-              }}
-              onSubmit={this.handleSubmit}
-              instantValidate
-            >
-              <Container>{this.renderStep()}</Container>
-                <Toolbar className='buttons'>
-                  <Button
-                    onClick={this.prevStep}
-                    style={{ alignItems: "center", justifyContent: "center"}}
-                    disabled={step === 1}
-                  >
-                    Back
-                  </Button>
-                  <Button sx={{alignItems: "center", justifyContent: "center"}}
-                    color="primary"
-                    variant="contained"
-                    onClick={step < 3 ? this.nextStep : this.submit}
-                    disabled={step < 3 ? disabled || submitted : !captchaValid}
-                  >
-                    {(submitted && "Your form is submitted!") ||
-                      (step < 3 ? "Next" : "Place Order")}
-                  </Button>
-                </Toolbar>
-            </ValidatorForm>
-          </div>
-        </Paper>
-      </div>
-    );
-  }
+  return (
+    <Box sx={{ width: '100%' }}>
+      <PrimarySearchAppBar />
+      <br></br>
+      <Container>
+        <Stepper activeStep={activeStep}>
+          {steps.map((label) => {
+            const stepProps = {};
+            const labelProps = {};
+            return (
+              <Step key={label} {...stepProps}>
+                <StepLabel {...labelProps}>{label}</StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
+      </Container>
+      {activeStep === 1 ? <AddAddress /> : ''}
+      <React.Fragment>
+        <Toolbar className='buttons'>
+          <Button
+            color="inherit"
+            disabled={activeStep === 0}
+            onClick={handleBack}
+            style={{ alignItems: "center", justifyContent: "center" }}
+          >
+            Back
+          </Button>
+          <Button onClick={handleNext} sx={{ alignItems: "center", justifyContent: "center" }}>
+            {activeStep === steps.length ? 'Place Order' : 'Next'}
+          </Button>
+        </Toolbar>
+      </React.Fragment>
+    </Box>
+  );
 }
-export default withStyles(styles)(App);

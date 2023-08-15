@@ -53,7 +53,10 @@ export default function MyRegistration() {
       lastName: data.get('lastName'),
       email: data.get('email'),
       password: data.get('password'),
-      contactNumber: data.get('contactNumber')
+      contactNumber: data.get('contactNumber'),
+      "role": [
+        "admin"
+      ]
     };
     userRegistrationRequest(registrationRequestData);
   };
@@ -147,7 +150,7 @@ export default function MyRegistration() {
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="/login" variant="body2">
+                <Link href="/" variant="body2">
                   {"Already have an account? Sign in"}
                 </Link>
               </Grid>

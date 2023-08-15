@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React,{useState} from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -7,35 +7,52 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-
+import { FormControl } from '@mui/base';
+import axios from 'axios';
 
 const defaultTheme = createTheme();
 
-export default function AddAddress() {
+export default function AddAddress(props) {
 
-  const [age, setAge] = React.useState('');
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+  const [] = useState(getAddresses);
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const id = sessionStorage.getItem('id');
     const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('name'),
-      contactNumber: data.get('contactNumber'),
-      street: data.get('street'),
-      city: data.get('city'),
-      state: data.get('state'),
-      landmark: data.get('landmark'),
-      zipcode: data.get('zipcode')
-    });
+    const formData = Object.fromEntries(data);
+    formData.id= Math.random();
+    formData.user= id
+    userAddressRequest(formData);
   };
+
+  const userAddressRequest = async(formData) => {
+    const token = sessionStorage.getItem('token');
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    const SIGNIN_URL = "http://localhost:8080/api/addresses";
+    try{
+      var response = await axios.get(SIGNIN_URL, formData,config);
+      console.log(response.data);
+    }catch(err){
+      console.log(err.response);
+    }
+  }
+
+  async function getAddresses() {
+    const token = sessionStorage.getItem('token');
+    const SIGNIN_URL = "http://localhost:8080/api/addresses";
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    try {
+      var response = await axios.get(SIGNIN_URL, config);
+      console.log(response)
+    } catch (err) {
+      console.log(err.response);
+    }
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -49,37 +66,22 @@ export default function AddAddress() {
             alignItems: 'center',
           }}
         >
-          <Box>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Select...</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={age}
-                label="Select..."
-                onChange={handleChange}
-              >
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
           <Typography component="h1" variant="h6" sx={{ padding: 5 }}>
             - OR -
           </Typography>
           <Typography component="h1" variant="h5">
             Add Address
           </Typography>
+          <FormControl>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
-                  name="Name"
+                  name="name"
                   required
                   fullWidth
-                  id="Name"
+                  id="name"
                   label="Name"
                   autoFocus
                 />
@@ -127,7 +129,6 @@ export default function AddAddress() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
                   fullWidth
                   name="landmark"
                   label="Landmark"
@@ -154,6 +155,7 @@ export default function AddAddress() {
               Add Address
             </Button>
           </Box>
+          </FormControl>
         </Box>
       </Container>
     </ThemeProvider>

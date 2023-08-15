@@ -11,6 +11,7 @@ export default function BasicSelect(props) {
 
   const handleChange = (event) => {
     console.log(event.target.value);
+    setOrder(event.target.value);
     var data = props.data;
     if(event.target.value === "lowToHigh"){
       data.sort(fromLowToHigh);
