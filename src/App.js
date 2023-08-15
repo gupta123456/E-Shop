@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import PlaceOrder from "./component/PlaceOrder/placeOrder";
 import AddProduct from "./component/AddProduct/addProduct";
 import ModifyProduct from './component/ModifyProduct/modifyProduct';
+import Address from "./component/Address/Address";
 
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
        <Route exact path="/productDetails" element={<Details />}/>
        <Route exact path="/addProduct" element={<AddProduct />}/>
        <Route exact path="/modifyProduct" element={<ModifyProduct />}/>
+       <Route exact path="/Address" element={<Address />}/>
      </Routes>
     </BrowserRouter>
   );
