@@ -8,6 +8,7 @@ import PrimarySearchAppBar from "../navbar/Navbar";
 import AddAddress from "../AddAddress/addAddress";
 import Toolbar from "@material-ui/core/Toolbar";
 import { Container } from '@mui/system';
+import Address from '../Address/Address';
 
 const steps = ['Items', 'Select Address', 'Confirm Order'];
 
@@ -47,6 +48,7 @@ export default function HorizontalLinearStepper() {
         </Stepper>
       </Container>
       {activeStep === 1 ? <AddAddress /> : ''}
+      {activeStep === 2 ? <Address /> : ''}
       <React.Fragment>
         <Toolbar className='buttons'>
           <Button
