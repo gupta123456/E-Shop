@@ -2,40 +2,58 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
 import PrimarySearchAppBar from '../navbar/Navbar';
 
+// TODO remove, this demo shouldn't need to reset the theme.
+async function addProductRequest(addProductRequestData){
+  const ADD_PRODUCT_URL = "http://localhost:8080/api/products";
+  console.log("Product Request Data :: ");
+  console.log(addProductRequestData);
+  /*
+  const config = {
+    headers: { 'Content-Type' : 'application/json' }
+  };
+  */
+  try{
+    var response = await axios({
+      method: 'post',
+      url: ADD_PRODUCT_URL,
+      data: addProductRequestData
+    });
+    console.log(response.data);
+  }catch(err){
+    console.log(err.response.data);
+  }
+}
 
 const defaultTheme = createTheme();
 
 export default function AddProduct() {
-
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(data);
-    console.log({
-      name: data.get('name'),
-      contactNumber: data.get('contactNumber'),
-      manufacturer: data.get('manufacturer'),
-      items: data.get('items'),
-      state: data.get('state'),
-      price: data.get('price'),
-      description: data.get('description')
-    });
+    var addProductRequestData = {
+      "id": "12345",
+      "name": data.get("name"),
+      "category": data.get("category"),
+      "price": parseInt(data.get("price")),
+      "description": data.get("productDescription"),
+      "manufacturer": data.get("manufacturer"),
+      "availableItems": parseInt(data.get("availableItems")),
+      "imageUrl": data.get("imageUrl")
+    };
+    console.log(addProductRequestData);
+    addProductRequest(addProductRequestData);
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <PrimarySearchAppBar/>
+      <PrimarySearchAppBar />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -49,91 +67,81 @@ export default function AddProduct() {
           <Typography component="h1" variant="h5">
             Add Product
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="given-name"
-                  name="Name"
-                  required
-                  fullWidth
-                  id="Name"
-                  label="Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12}>
-              <Box>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Select...</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Select..."
-                  >
-                    <MenuItem value="default">Default</MenuItem>
-                    <MenuItem value="lowToHigh">Price: Low to High</MenuItem>
-                    <MenuItem value="highToLow">Price: High to Low</MenuItem>
-                    <MenuItem value="latestToOldest">Newest</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="manufacture"
-                  label="Manufacture"
-                  name="manufacture"
-                  autoComplete="manufacture"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="items"
-                  label="Available Items"
-                  name="items"
-                  autoComplete="items"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  type="number"
-                  name="price"
-                  label="Price"
-                  id="price"
-                  autoComplete="price"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  name="image"
-                  label="Image URL"
-                  id="image"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  name="description"
-                  label="Product Description"
-                  id="description"
-                />
-              </Grid>
-            </Grid>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="name"
+              label="Name"
+              name="name"
+              autoComplete="name"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="category"
+              label="category"
+              name="category"
+              autoComplete="category"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="manufacturer"
+              label="Manufacturer"
+              name="manufacturer"
+              autoComplete="manufacturer"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="availableItems"
+              label="Available Items"
+              id="availableItems"
+              autoComplete="availableItems"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="price"
+              label="Price"
+              id="price"
+              autoComplete="price"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="imageURL"
+              label="Image URL"
+              id="imageURL"
+              autoComplete="imageURL"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="productDescription"
+              label="Product Description"
+              id="productDescription"
+              autoComplete="productDescription"
+            />            
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              style={{ background: '#3f51b5' }}
             >
-              Add Address
+              Save Product
             </Button>
           </Box>
         </Box>

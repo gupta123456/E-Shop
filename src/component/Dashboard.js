@@ -10,6 +10,7 @@ import axios from 'axios';
 function Dashoard() {
 
   const [data, setData] = useState(cardData);
+   // eslint-disable-next-line
   const [] = useState(getUsers);
 
   function updateData(data) {
