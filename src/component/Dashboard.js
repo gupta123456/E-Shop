@@ -10,13 +10,15 @@ import axios from 'axios';
 function Dashoard() {
 
   const [data, setData] = useState(cardData);
-   // eslint-disable-next-line
+  // eslint-disable-next-line
   const [] = useState(getUsers);
+  // eslint-disable-next-line
+  const [] = useState(getProducts);
 
   function updateData(data) {
-    console.log("Updated Data :: ");
-    console.log(data);
-    setData(data);
+    // console.log("Updated Data :: ");
+    // console.log(data);
+    // setData(data);
   }
 
   async function getUsers() {
@@ -31,10 +33,26 @@ function Dashoard() {
       let data = response.data;
       for (var i = 0; i < data.length; i++) {
         if (data[i].email === user) {
-          console.log(data[i].id)
-          sessionStorage.setItem('id', data[i].id)
+          console.log(data[i].roles[0].name)
+          sessionStorage.setItem('role', data[i].roles[0].name);
         }
       }
+    } catch (err) {
+      console.log(err.response);
+    }
+  }
+
+  async function getProducts() {
+    const token = sessionStorage.getItem('token');
+    const SIGNIN_URL = "http://localhost:8080/api/products";
+    const config = {
+      headers: { Authorization: `Bearer ${token}` }
+    };
+    try {
+      var response = await axios.get(SIGNIN_URL, config);
+      console.log(response.data);
+      const Products = response.data;
+      setData(Products);
     } catch (err) {
       console.log(err.response);
     }
@@ -56,9 +74,9 @@ function Dashoard() {
             <div>
               <MediaCard
                 key={card.id}
-                heading={card.heading}
-                body={card.body}
-                footer={card.footer}
+                heading={card.name}
+                imageUrl={card.imageUrl}
+                description={card.description}
               />
             </div>
           )

@@ -26,6 +26,7 @@ async function addProductRequest(addProductRequestData){
       data: addProductRequestData
     });
     console.log(response.data);
+    window.location.replace('/dashboard');
   }catch(err){
     console.log(err.response.data);
   }
@@ -45,7 +46,7 @@ export default function AddProduct() {
       "description": data.get("productDescription"),
       "manufacturer": data.get("manufacturer"),
       "availableItems": parseInt(data.get("availableItems")),
-      "imageUrl": data.get("imageUrl")
+      "imageUrl": data.get("imageURL")
     };
     console.log(addProductRequestData);
     addProductRequest(addProductRequestData);
@@ -102,6 +103,7 @@ export default function AddProduct() {
               margin="normal"
               required
               fullWidth
+              type='number'
               name="availableItems"
               label="Available Items"
               id="availableItems"
@@ -111,6 +113,7 @@ export default function AddProduct() {
               margin="normal"
               required
               fullWidth
+              type='number'
               name="price"
               label="Price"
               id="price"

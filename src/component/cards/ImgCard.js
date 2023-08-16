@@ -5,27 +5,32 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Shoes from "../../img/shoes.jpg";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+const role = sessionStorage.getItem('role');
 
 export default function MediaCard(props) {
   return (
     <Card>
       <CardMedia
+        component="img"
         sx={{ height: 140 }}
-        image= {Shoes}
+        image= {props.imageUrl}
         title="Addidas"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography gutterBottom variant="h6" component="div">
           {props.heading}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Try the all new Addidas sports shoes.
+          {props.description}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
+        <Button size="small" variant='contained' style={{ background: '#3f51b5' }}>Buy</Button>
+        {role === 'ADMIN' ? <EditIcon sx={{float:'right',fontSize:'small'}}/> : ''}
+        {role === 'ADMIN' ?  <DeleteIcon sx={{fontSize:'small'}}/> : ''}
       </CardActions>
     </Card>
   );
