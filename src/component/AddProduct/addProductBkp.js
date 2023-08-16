@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import * as React from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -6,56 +6,38 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { FormControl } from '@mui/base';
-import axios from 'axios';
+import PrimarySearchAppBar from '../navbar/Navbar';
+
 
 const defaultTheme = createTheme();
 
-export default function AddAddress(props) {
-  // eslint-disable-next-line
-  const [] = useState(getAddresses);
+export default function AddProduct() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const id = sessionStorage.getItem('id');
     const data = new FormData(event.currentTarget);
-    const formData = Object.fromEntries(data);
-    formData.id= Math.random();
-    formData.user= id
-    userAddressRequest(formData);
+    console.log(data);
+    var addProductRequest = {
+      "id": "12345",
+      "name": data.get('Name'),
+      "category": data.get('category'),
+      "price": data.get('price'),
+      "description": data.get('description'),
+      "manufacturer": data.get('manufacturer'),
+      "availableItems": data.get('availableItems'),
+      "imageUrl": data.get('image')
+    };
+    console.log(addProductRequest);
   };
-
-  const userAddressRequest = async(formData) => {
-    const token = sessionStorage.getItem('token');
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    };
-    const SIGNIN_URL = "http://localhost:8080/api/addresses";
-    try{
-      var response = await axios.get(SIGNIN_URL, formData,config);
-      console.log(response.data);
-    }catch(err){
-      console.log(err.response);
-    }
-  }
-
-  async function getAddresses() {
-    const token = sessionStorage.getItem('token');
-    const SIGNIN_URL = "http://localhost:8080/api/addresses";
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    };
-    try {
-      var response = await axios.get(SIGNIN_URL, config);
-      console.log(response)
-    } catch (err) {
-      console.log(err.response);
-    }
-  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      <PrimarySearchAppBar/>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -66,83 +48,84 @@ export default function AddAddress(props) {
             alignItems: 'center',
           }}
         >
-          <Typography component="h1" variant="h6" sx={{ padding: 5 }}>
-            - OR -
-          </Typography>
           <Typography component="h1" variant="h5">
-            Add Address
+            Add Product
           </Typography>
-          <FormControl>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
-                  name="name"
+                  name="Name"
                   required
                   fullWidth
-                  id="name"
+                  id="Name"
                   label="Name"
                   autoFocus
                 />
               </Grid>
               <Grid item xs={12}>
+              <Box>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Select...</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Select..."
+                  >
+                    <MenuItem value="Apparel">Apparel</MenuItem>
+                    <MenuItem value="Electronics">Electronics</MenuItem>
+                    <MenuItem value="Footware">Footwear</MenuItem>
+                    <MenuItem value="Personal Care">Personal Care</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+              </Grid>
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  name="contactNumber"
-                  label="Contact Number"
+                  id="manufacture"
+                  label="Manufacture"
+                  name="manufacture"
+                  autoComplete="manufacture"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="items"
+                  label="Available Items"
+                  name="items"
+                  autoComplete="items"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
                   type="number"
-                  id="number"
-                  autoComplete="contact-number"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="street"
-                  label="Street"
-                  name="street"
-                  autoComplete="street"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="city"
-                  label="City"
-                  name="city"
-                  autoComplete="city"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="state"
-                  label="State"
-                  id="state"
-                  autoComplete="state"
+                  name="price"
+                  label="Price"
+                  id="price"
+                  autoComplete="price"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  name="landmark"
-                  label="Landmark"
-                  id="landmark"
+                  name="image"
+                  label="Image URL"
+                  id="image"
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  required
                   fullWidth
-                  name="zipcode"
-                  label="Zip Code"
-                  type="number"
-                  id="zipcode"
+                  name="description"
+                  label="Product Description"
+                  id="description"
                 />
               </Grid>
             </Grid>
@@ -155,7 +138,6 @@ export default function AddAddress(props) {
               Add Address
             </Button>
           </Box>
-          </FormControl>
         </Box>
       </Container>
     </ThemeProvider>
