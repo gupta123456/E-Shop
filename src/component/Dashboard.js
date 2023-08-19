@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ColorToggleButton from "./toggle/toggleFilter.js";
 import MediaCard from "./cards/ImgCard.js";
 import { cardData } from "../data/CardData.js";
@@ -9,19 +9,23 @@ import axios from 'axios';
 
 function Dashoard() {
 
-  const [data, setData] = useState(cardData);
-  // eslint-disable-next-line
-  const [] = useState(getUsers);
-  // eslint-disable-next-line
-  const [] = useState(getProducts);
+  const [data, setData] = useState([]);
 
   function updateData(data) {
-    // console.log("Updated Data :: ");
-    // console.log(data);
-    // setData(data);
+     console.log("Updated Data :: ");
+     console.log(data);
+     setData(data);
   }
 
-  async function getUsers() {
+  useEffect(() => {
+    getUsers();
+  }, [])
+
+  useEffect(() => {
+    getProducts();
+  }, [])
+
+  function getUsers() {
     const token = sessionStorage.getItem('token');
     const user = sessionStorage.getItem('user')
     const SIGNIN_URL = "http://localhost:8080/api/users";
@@ -29,30 +33,30 @@ function Dashoard() {
       headers: { Authorization: `Bearer ${token}` }
     };
     try {
-      var response = await axios.get(SIGNIN_URL, config);
-      let data = response.data;
-      for (var i = 0; i < data.length; i++) {
-        if (data[i].email === user) {
-          console.log(data[i].roles[0].name)
-          sessionStorage.setItem('role', data[i].roles[0].name);
+      return axios.get(SIGNIN_URL, config).then((response) => {
+        let data = response.data;
+        for (var i = 0; i < data.length; i++) {
+          if (data[i].email === user) {
+            sessionStorage.setItem('role', data[i].roles[0].name);
+          }
         }
-      }
+      })
     } catch (err) {
       console.log(err.response);
     }
   }
 
-  async function getProducts() {
+  function getProducts() {
     const token = sessionStorage.getItem('token');
     const SIGNIN_URL = "http://localhost:8080/api/products";
     const config = {
       headers: { Authorization: `Bearer ${token}` }
     };
     try {
-      var response = await axios.get(SIGNIN_URL, config);
-      console.log(response.data);
-      const Products = response.data;
-      setData(Products);
+      return axios.get(SIGNIN_URL, config).then((response) => {
+        console.log(response.data);
+        setData(response.data);
+      })
     } catch (err) {
       console.log(err.response);
     }
@@ -69,11 +73,12 @@ function Dashoard() {
       </div>
 
       <div style={{ margin: "2em", display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "2em" }}>
-        {data.map((card) => {
+        {data.map((card,i) => {
           return (
             <div>
               <MediaCard
-                key={card.id}
+                key={i}
+                id={card.id}
                 heading={card.name}
                 imageUrl={card.imageUrl}
                 description={card.description}

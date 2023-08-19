@@ -20,9 +20,7 @@ if(token){
 }
 
 const logout = () =>{
-  sessionStorage.removeItem('token');
-  sessionStorage.removeItem('user');
-  sessionStorage.removeItem('role');
+  sessionStorage.clear();
   window.location.replace("/");
 }
 
