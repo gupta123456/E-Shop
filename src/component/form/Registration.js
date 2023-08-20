@@ -10,7 +10,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {pink} from '@mui/material/colors';
+import { pink } from '@mui/material/colors';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
 
 function Copyright(props) {
@@ -20,7 +22,7 @@ function Copyright(props) {
       <Link color="inherit" href="https://mui.com/">
         Upgrad
       </Link>{' '}
-      {new Date().getFullYear()-2}
+      {new Date().getFullYear() - 2}
       {'.'}
     </Typography>
   );
@@ -28,15 +30,35 @@ function Copyright(props) {
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
-async function userRegistrationRequest(registrationRequestData){
+async function userRegistrationRequest(registrationRequestData) {
   const REGISTRATION_URL = "http://localhost:8080/api/auth/signup";
   console.log("Registration Data :: ");
   console.log(registrationRequestData);
-  try{
+  try {
     var response = await axios.post(REGISTRATION_URL, registrationRequestData);
     console.log(response.data);
-  }catch(err){
+    notify('success');
+    setTimeout(() => {
+      window.location.replace("/");
+    }, 1000)
+  } catch (err) {
+    notify('error');
     console.log(err.response.data);
+  }
+}
+
+const notify = (str) => {
+  if (str === 'success') {
+    toast.success("Signup Successfully!", {
+      position: toast.POSITION.TOP_RIGHT,
+      icon: false
+    });
+  }
+  if (str === 'error') {
+    toast.error("Please check credentials", {
+      position: toast.POSITION.TOP_RIGHT,
+      icon: false
+    });
   }
 }
 
@@ -44,7 +66,6 @@ const defaultTheme = createTheme();
 
 export default function MyRegistration() {
   const color = pink[500];
-
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -138,7 +159,7 @@ export default function MyRegistration() {
               label="Contact Number"
               id="contactNumber"
               autoComplete="contact-number"
-            />            
+            />
             <Button
               type="submit"
               fullWidth
@@ -159,6 +180,7 @@ export default function MyRegistration() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
+      <ToastContainer theme="colored" autoClose={10000} hideProgressBar={false} pauseOnHover />
     </ThemeProvider>
   );
 }

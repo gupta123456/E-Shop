@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {pink} from '@mui/material/colors';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
 
 function Copyright(props) {
@@ -51,11 +53,30 @@ export default function MySignIn() {
       var response = await axios.post(SIGNIN_URL, signInRequestData);
       console.log(response.data);
       sessionStorage.setItem("token", response.data.token);
-      window.location.replace("/dashboard");
+      notify('success');
+      setTimeout(()=>{
+        window.location.replace("/dashboard");
+      },1000)
     }catch(err){
+      notify('error');
       console.log(err.response);
     }
     console.log("Session Storage Token :: "+ sessionStorage.getItem("token"));
+  }
+
+  const notify = (str) => {
+    if (str === 'success') {
+      toast.success("Login Successfully!", {
+        position: toast.POSITION.TOP_RIGHT,
+        icon: false
+      });
+    }
+    if (str === 'error') {
+      toast.error("Please check credentials", {
+        position: toast.POSITION.TOP_RIGHT,
+        icon: false
+      });
+    }
   }
  
   return (
@@ -117,6 +138,7 @@ export default function MySignIn() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
+      <ToastContainer theme="colored" autoClose={10000} hideProgressBar={false} pauseOnHover/>
     </ThemeProvider>
   );
 }

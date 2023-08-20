@@ -12,7 +12,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
+import '../../assets/index.css';
 
 export default function MediaCard(props) {
 
@@ -37,10 +40,27 @@ export default function MediaCard(props) {
     try {
       axios.delete(REGISTRATION_URL, config).then(() => {
         handleClose();
+        notify('success');
         window.location.replace('/dashboard');
       })
     } catch (err) {
+      notify('error');
       console.log(err);
+    }
+  }
+
+  const notify = (str) => {
+    if (str === 'success') {
+      toast.success("Product deleted successfully", {
+        position: toast.POSITION.TOP_RIGHT,
+        icon: false
+      });
+    }
+    if (str === 'error') {
+      toast.error("Please check credentials", {
+        position: toast.POSITION.TOP_RIGHT,
+        icon: false
+      });
     }
   }
 
@@ -48,6 +68,11 @@ export default function MediaCard(props) {
     sessionStorage.setItem('id', props.id);
     window.location.replace('/productDetails');
   }
+
+  function modify(){
+
+  }
+
   return (
     <div>
       <Card>
@@ -67,8 +92,10 @@ export default function MediaCard(props) {
         </CardContent>
         <CardActions>
           <Button size="small" onClick={redirectTo} variant='contained' style={{ background: '#3f51b5' }}>Buy</Button>
-          {role === 'ADMIN' ? <EditIcon sx={{ float: 'right', fontSize: 'small' }} /> : ''}
-          {role === 'ADMIN' ? <DeleteIcon onClick={handleClickOpen} sx={{ fontSize: 'small' }} /> : ''}
+          <div className='actions'>
+            {role === 'ADMIN' ? <EditIcon onClick={modify} sx={{ fontSize: 'medium' }} /> : ''}
+            {role === 'ADMIN' ? <DeleteIcon onClick={handleClickOpen} sx={{ fontSize: 'medium' }} /> : ''}
+          </div>
         </CardActions>
       </Card>
       <Dialog
@@ -92,6 +119,7 @@ export default function MediaCard(props) {
           </Button>
         </DialogActions>
       </Dialog>
+      <ToastContainer theme="colored" autoClose={10000} hideProgressBar={false} pauseOnHover/>
     </div>
   );
 }

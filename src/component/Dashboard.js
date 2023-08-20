@@ -64,7 +64,7 @@ function Dashoard() {
 
   return (
     <div style={{ margin: 0 }}>
-      <PrimarySearchAppBar />
+      <PrimarySearchAppBar/>
       <div style={{ marginTop: "1em", textAlign: "center" }}>
         <ColorToggleButton data={cardData} updateData={updateData} />
       </div>

@@ -8,6 +8,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { FormControl } from '@mui/base';
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
 
 const defaultTheme = createTheme();
@@ -26,6 +28,21 @@ export default function AddAddress(props) {
     userAddressRequest(formData);
   };
 
+  const notify = (str) => {
+    if (str === 'success') {
+      toast.success("Address added successfully", {
+        position: toast.POSITION.TOP_RIGHT,
+        icon: false
+      });
+    }
+    if (str === 'error') {
+      toast.error("Please check address form", {
+        position: toast.POSITION.TOP_RIGHT,
+        icon: false
+      });
+    }
+  }
+
   const userAddressRequest = async(formData) => {
     const token = sessionStorage.getItem('token');
     const config = {
@@ -33,9 +50,11 @@ export default function AddAddress(props) {
     };
     const SIGNIN_URL = "http://localhost:8080/api/addresses";
     try{
-      var response = await axios.get(SIGNIN_URL, formData,config);
+      var response = await axios.posy(SIGNIN_URL, formData,config);
+      notify('success');
       console.log(response.data);
     }catch(err){
+      notify('error');
       console.log(err.response);
     }
   }
@@ -158,6 +177,7 @@ export default function AddAddress(props) {
           </FormControl>
         </Box>
       </Container>
+      <ToastContainer theme="colored" autoClose={10000} hideProgressBar={false} pauseOnHover/>
     </ThemeProvider>
   );
 }
