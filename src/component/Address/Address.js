@@ -37,7 +37,7 @@ const card1 = (
       </Typography>
       <Typography variant="h6">
         <br></br>
-        <Box sx = {{color: 'error.main' }}> Total Price: $1000  </Box>
+        <Box sx = {{color: 'error.main' }}> Total Price : ₹1000  </Box>
             
         </Typography>
     </CardContent>
@@ -45,7 +45,7 @@ const card1 = (
   </Box>
 );
 const card2 = (
-    <Box sx = {{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
+    <Box sx = {{width: '75%',display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
     <React.Fragment>
       <CardContent sx = {{display: 'inline'}}>
         <Typography variant="h5" component="div">
@@ -89,7 +89,7 @@ export default function Address() {
             alignItems: 'center',
           }}
         >
-    <Box sx={{ minWidth: 275}}>
+    <Box sx={{ Width: 'auto ',height:'auto'}}>
         <Grid container spacing={0}>
             <Grid xs={8}>
             <Card variant="outlined" >{card1}</Card>
