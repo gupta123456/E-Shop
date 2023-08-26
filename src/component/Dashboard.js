@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import ColorToggleButton from "./toggle/toggleFilter.js";
 import MediaCard from "./cards/ImgCard.js";
-import { cardData } from "../data/CardData.js";
 import BasicSelect from "./dropdown/Dropdown.js";
-import "../assets/index.css";
 import PrimarySearchAppBar from "./navbar/Navbar.js";
 import axios from 'axios';
+import "../assets/index.css";
 
 function Dashoard() {
 
@@ -66,10 +65,10 @@ function Dashoard() {
     <div style={{ margin: 0 }}>
       <PrimarySearchAppBar/>
       <div style={{ marginTop: "1em", textAlign: "center" }}>
-        <ColorToggleButton data={cardData} updateData={updateData} />
+        <ColorToggleButton data={data} updateData={updateData} />
       </div>
       <div style={{ marginLeft: "2em", width: "10em" }}>
-        <BasicSelect data={cardData} updateData={updateData} />
+        <BasicSelect data={data} updateData={updateData} />
       </div>
 
       <div style={{ margin: "2em", display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "2em" }}>
@@ -82,6 +81,7 @@ function Dashoard() {
                 heading={card.name}
                 imageUrl={card.imageUrl}
                 description={card.description}
+                price={card.price}
               />
             </div>
           )

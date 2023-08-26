@@ -14,48 +14,24 @@ export default function BasicSelect(props) {
     setOrder(event.target.value);
     var data = props.data;
     if(event.target.value === "lowToHigh"){
-      data.sort(fromLowToHigh);
+      data = [...data].sort((a,b)=>{
+        return a.price > b.price ? 1 : -1;
+      })
       console.log("After Sorting Low to High");
       props.updateData(data);
     } else if(event.target.value === "highToLow"){
-      data.sort(fromHighToLow);
+      data = [...data].sort((a,b)=>{
+        return a.price < b.price ? 1 : -1;
+      })
       console.log("After Sorting High To Low");
       props.updateData(data);
     } else if(event.target.value === "default"){
-      data.sort(defaultSort);
+      data = [...data].sort((a,b)=>{
+        return a.price > b.price ? 1 : -1;
+      })
       console.log("After Sorting Default");
       props.updateData(data);
     }
-  }
-
-  function defaultSort(a,b){
-    if(a.id<b.id){
-      return -1;
-    }
-    if(a.id>b.id){
-      return 1;
-    }
-    return 0;
-  }
-
-  function fromLowToHigh(a,b){
-    if(a.price<b.price){
-      return -1;
-    }
-    if(a.price>b.price){
-      return 1;
-    }
-    return 0;
-  }
-
-  function fromHighToLow(a,b){
-    if(a.price<b.price){
-      return 1;
-    }
-    if(a.price>b.price){
-      return -1;
-    }
-    return 0;
   }
 
   return (

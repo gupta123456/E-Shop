@@ -110,9 +110,9 @@ export default function PrimarySearchAppBar() {
           </CenteredContent>
             <Box sx={{ flexGrow: 1 }} />
                 <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                    <Link href="/dashboard" className='headerlinks' style={{ textDecoration: 'underline' }}>Home</Link>
+                    {checkLogIn ? <Link href="/products" className='headerlinks' style={{ textDecoration: 'underline' }}>Home</Link> : ''}
                     {role === 'ADMIN' ? <Link href="/addProduct" className='headerlinks' style={{ textDecoration: 'underline' }}>Add Product</Link> : ''}
-                    {!checkLogIn ? <Link href='/'  className='headerlinks' style={{ textDecoration: 'underline' }}>Login</Link> : ''}
+                    {!checkLogIn ? <Link href='/login'  className='headerlinks' style={{ textDecoration: 'underline' }}>Login</Link> : ''}
                     {!checkLogIn ? <Link  href='/signup' className='headerlinks' style={{ textDecoration: 'underline' }}>Sign Up</Link> : ''}
                     {checkLogIn ? <Button variant="contained" className='logout' href='/' onClick={logout}>Logout</Button> : ''}
                 </Box>

@@ -5,7 +5,7 @@ import axios from 'axios';
 export default function ProductDetails() {
 
   const [data,setData] = useState({});
-  const id = localStorage.getItem('id');
+  const id = sessionStorage.getItem('id');
 
   useEffect(() => {
     if (id) {
@@ -21,7 +21,6 @@ export default function ProductDetails() {
     };
     try {
       axios.get(SIGNIN_URL, config).then((response) => {
-        console.log(response.data);
         sessionStorage.setItem('productDetails',JSON.stringify(response.data));
         setData(response.data);
       });

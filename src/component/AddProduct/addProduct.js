@@ -26,7 +26,7 @@ async function addProductRequest(addProductRequestData){
       data: addProductRequestData
     });
     console.log(response.data);
-    window.location.replace('/dashboard');
+    window.location.replace('/products');
   }catch(err){
     console.log(err.response.data);
   }

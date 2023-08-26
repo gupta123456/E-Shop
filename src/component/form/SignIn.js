@@ -55,11 +55,10 @@ export default function MySignIn() {
       sessionStorage.setItem("token", response.data.token);
       notify('success');
       setTimeout(()=>{
-        window.location.replace("/dashboard");
-      },1000)
+        window.location.replace("/products");
+      },300)
     }catch(err){
       notify('error');
-      console.log(err.response);
     }
     console.log("Session Storage Token :: "+ sessionStorage.getItem("token"));
   }

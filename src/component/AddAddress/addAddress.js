@@ -44,6 +44,7 @@ export default function AddAddress(props) {
   }
 
   const userAddressRequest = async(formData) => {
+    console.log(formData);
     const token = sessionStorage.getItem('token');
     const config = {
       headers: { Authorization: `Bearer ${token}` }
@@ -55,7 +56,6 @@ export default function AddAddress(props) {
       console.log(response.data);
     }catch(err){
       notify('error');
-      console.log(err.response);
     }
   }
 
@@ -177,7 +177,7 @@ export default function AddAddress(props) {
           </FormControl>
         </Box>
       </Container>
-      <ToastContainer theme="colored" autoClose={10000} hideProgressBar={false} pauseOnHover/>
+      <ToastContainer theme="colored" autoClose={10000} hideProgressBar={false}/>
     </ThemeProvider>
   );
 }
