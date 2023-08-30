@@ -1,36 +1,35 @@
 import { Button, Chip, Grid, TextField, Typography } from "@mui/material";
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 export default function ProductDetails() {
 
-  const [data,setData] = useState({});
-  const id = sessionStorage.getItem('id');
+  const [data, setData] = useState({});
+  const [quantity, setQuantity] = useState(1);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const token = sessionStorage.getItem('token')
 
   useEffect(() => {
-    if (id) {
-      getProductDetail();
-    }
-  }, [id]);
+    getProductDetails()
+  }, []);
 
-  function getProductDetail() {
-    const token = sessionStorage.getItem('token');
-    const SIGNIN_URL = `http://localhost:8080/api/products/${id}`;
-    const config = {
-      headers: { Authorization: `Bearer ${token}` },
-    };
-    try {
-      axios.get(SIGNIN_URL, config).then((response) => {
-        sessionStorage.setItem('productDetails',JSON.stringify(response.data));
+  function getProductDetails() {
+    axios
+      .get(`http://localhost:8080/api/products/${id}`, {
+        headers: {
+          'x-auth-token': token,
+        },
+      })
+      .then((response) => {
         setData(response.data);
-      });
-    } catch (err) {
-      console.log(err.response);
-    }
+      })
   }
 
-  function handleChange(event){
-    sessionStorage.setItem('quantity',event.target.value);
+  function handleChange(event) {
+    setQuantity(event.target.value)
+    sessionStorage.setItem('quantity', event.target.value);
   }
 
   return (
@@ -41,7 +40,7 @@ export default function ProductDetails() {
         </Grid>
         <Grid item xs={8}>
           <Typography variant="h4" gutterBottom>
-            iPhone 12 <Chip label="Available Quantity: 148" style={{ background: '#3f51b5', color: "white" }} />
+            iPhone 12 <Chip label={`Available Quantity: ${data.availableItems}`} style={{ background: '#3f51b5', color: "white" }} />
           </Typography>
           <Typography variant="p">
             Category: {data.category}
@@ -59,10 +58,15 @@ export default function ProductDetails() {
               autoComplete="quantity"
               autoFocus
               onChange={handleChange}
+              value={quantity}
             />
           </div>
           <div style={{ width: "8em" }}>
-            <Button type="submit" fullWidth variant="contained" style={{ background: '#3f51b5' }} href='/placeOrder'>PLACE ORDER</Button>
+            <Button disabled={!(quantity >= 1)} type="submit" fullWidth variant="contained" style={{ background: '#3f51b5' }} onClick={() =>
+              navigate("/placeOrder", {
+                state: { ...data, quantity: quantity },
+              })
+            }>PLACE ORDER</Button>
           </div>
         </Grid>
       </Grid>

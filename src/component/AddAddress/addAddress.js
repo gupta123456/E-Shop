@@ -1,30 +1,28 @@
-import React,{useState} from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { FormControl } from '@mui/base';
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
 
 const defaultTheme = createTheme();
 
-export default function AddAddress(props) {
-  // eslint-disable-next-line
-  const [] = useState(getAddresses);
+export default function AddAddress() {
+
+  const [address, setAddress] = React.useState();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const id = sessionStorage.getItem('id');
     const data = new FormData(event.currentTarget);
     const formData = Object.fromEntries(data);
-    formData.id= Math.random();
-    formData.user= id
+    formData.id = Math.random();
+    formData.user = id
     userAddressRequest(formData);
   };
 
@@ -43,39 +41,39 @@ export default function AddAddress(props) {
     }
   }
 
-  const userAddressRequest = async(formData) => {
+  const userAddressRequest = async (formData) => {
     console.log(formData);
     const token = sessionStorage.getItem('token');
     const config = {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { 'x-auth-token': token }
     };
     const SIGNIN_URL = "http://localhost:8080/api/addresses";
-    try{
-      var response = await axios.posy(SIGNIN_URL, formData,config);
+    try {
+      var response = await axios.posy(SIGNIN_URL, formData, config);
       notify('success');
       console.log(response.data);
-    }catch(err){
+      window.location.replace('/placeOrder');
+    } catch (err) {
       notify('error');
     }
   }
 
-  async function getAddresses() {
+  const getAddresses = () => {
     const token = sessionStorage.getItem('token');
     const SIGNIN_URL = "http://localhost:8080/api/addresses";
     const config = {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { 'x-auth-token': token }
     };
-    try {
-      var response = await axios.get(SIGNIN_URL, config);
-      console.log(response)
-    } catch (err) {
-      console.log(err.response);
-    }
+    return axios.get(SIGNIN_URL, config).then((response) => {
+      console.log(response.data)
+      const Addresses = response.data
+      return Addresses;
+    })
   }
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth='xs'>
         <CssBaseline />
         <Box
           sx={{
@@ -85,99 +83,89 @@ export default function AddAddress(props) {
             alignItems: 'center',
           }}
         >
-          <Typography component="h1" variant="h6" sx={{ padding: 5 }}>
+          <Typography component="h1" variant="h6" sx={{ padding: 3, alignContent: 'center', justifyContent: 'center' }}>
             - OR -
           </Typography>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" sx={{ alignContent: 'center', justifyContent: 'center' }}>
             Add Address
           </Typography>
-          <FormControl>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="given-name"
-                  name="name"
-                  required
-                  fullWidth
-                  id="name"
-                  label="Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="contactNumber"
-                  label="Contact Number"
-                  type="number"
-                  id="number"
-                  autoComplete="contact-number"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="street"
-                  label="Street"
-                  name="street"
-                  autoComplete="street"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="city"
-                  label="City"
-                  name="city"
-                  autoComplete="city"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="state"
-                  label="State"
-                  id="state"
-                  autoComplete="state"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  name="landmark"
-                  label="Landmark"
-                  id="landmark"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="zipcode"
-                  label="Zip Code"
-                  type="number"
-                  id="zipcode"
-                />
-              </Grid>
-            </Grid>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              autoComplete="given-name"
+              name="name"
+              required
+              fullWidth
+              id="name"
+              label="Name"
+              autoFocus
+              margin='normal'
+            />
+            <TextField
+              required
+              fullWidth
+              name="contactNumber"
+              label="Contact Number"
+              type="number"
+              id="number"
+              autoComplete="contact-number"
+              margin='normal'
+            />
+            <TextField
+              required
+              fullWidth
+              id="street"
+              label="Street"
+              name="street"
+              autoComplete="street"
+              margin='normal'
+            />
+            <TextField
+              required
+              fullWidth
+              id="city"
+              label="City"
+              name="city"
+              autoComplete="city"
+              margin='normal'
+            />
+            <TextField
+              required
+              fullWidth
+              name="state"
+              label="State"
+              id="state"
+              autoComplete="state"
+              margin='normal'
+            />
+            <TextField
+              fullWidth
+              name="landmark"
+              label="Landmark"
+              id="landmark"
+              margin='normal'
+            />
+            <TextField
+              required
+              fullWidth
+              name="zipcode"
+              label="Zip Code"
+              type="number"
+              id="zipcode"
+              margin='normal'
+            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              style={{ background: '#3f51b5' }}
             >
-              Add Address
+              Save Address
             </Button>
           </Box>
-          </FormControl>
         </Box>
       </Container>
-      <ToastContainer theme="colored" autoClose={10000} hideProgressBar={false}/>
+      <ToastContainer theme="colored" autoClose={10000} hideProgressBar={false} />
     </ThemeProvider>
   );
 }

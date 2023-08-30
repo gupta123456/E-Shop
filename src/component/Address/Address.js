@@ -1,17 +1,11 @@
 import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Container from '@mui/material/Container';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/system/Unstable_Grid/Grid';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-
-const defaultTheme = createTheme();
 const card1 = (
-    <Box sx = {{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
+    <Box sx = {{width:600 , display: "inline-flex", flexDirection: "row", flexWrap: "wrap"}}>
   <React.Fragment>
     <CardContent sx = {{display: 'inline'}}>
       <Typography variant="h5" component="div">
@@ -45,7 +39,7 @@ const card1 = (
   </Box>
 );
 const card2 = (
-    <Box sx = {{width: '75%',display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
+    <Box sx = {{width : 'auto' ,display: "inline-flex", flexDirection: "row", flexWrap: "wrap"}}>
     <React.Fragment>
       <CardContent sx = {{display: 'inline'}}>
         <Typography variant="h5" component="div">
@@ -77,32 +71,13 @@ const card2 = (
   
 export default function Address() {
   return (
-    <ThemeProvider theme={defaultTheme}>
-      
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-    <Box sx={{ Width: 'auto ',height:'auto'}}>
-        <Grid container spacing={0}>
-            <Grid xs={8}>
-            <Card variant="outlined" >{card1}</Card>
-            </Grid>
-            <Grid xs={4}>
-            <Card variant="outlined">{card2}</Card>
-            </Grid>
-            
-        </Grid>
         
+    <Box sx={{ justifyContent : 'flex-start',display: "inline-flex", flexDirection: "row", maxWidth: 'auto',maxheight:'auto'}}>
+            <Card variant="outlined" >{card1}</Card>
+            <Card variant="outlined">{card2}</Card> 
     </Box>
-    </Box>
-    </Container>
-    </ThemeProvider>
+    
+    
+   
   );
 }

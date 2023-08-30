@@ -12,16 +12,17 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
 import '../../assets/index.css';
+import { SuccessToast, ErrorToast } from "../../Common/Toasts/Toasts";
 
 export default function MediaCard(props) {
 
   const role = sessionStorage.getItem('role');
 
   const [open, setOpen] = React.useState(false);
+  const route = `/productDetails/${props.id}`
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -35,43 +36,20 @@ export default function MediaCard(props) {
     const token = sessionStorage.getItem('token');
     const REGISTRATION_URL = `http://localhost:8080/api/products/${props.id}`;
     const config = {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { 'x-auth-token':token },
     };
     try {
       axios.delete(REGISTRATION_URL, config).then(() => {
         handleClose();
-        notify('success');
+        SuccessToast('Product deleted successfully')
         window.location.replace('/dashboard');
       })
     } catch (err) {
-      notify('error');
+      ErrorToast('Please check')
       console.log(err);
     }
   }
 
-  const notify = (str) => {
-    if (str === 'success') {
-      toast.success("Product deleted successfully", {
-        position: toast.POSITION.TOP_RIGHT,
-        icon: false
-      });
-    }
-    if (str === 'error') {
-      toast.error("Please check credentials", {
-        position: toast.POSITION.TOP_RIGHT,
-        icon: false
-      });
-    }
-  }
-
-  function redirectTo() {
-    sessionStorage.setItem('id', props.id);
-    window.location.replace('/productDetails');
-  }
-
-  function modify(){
-
-  }
 
   return (
     <div>
@@ -91,9 +69,9 @@ export default function MediaCard(props) {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small" onClick={redirectTo} variant='contained' style={{ background: '#3f51b5' }}>Buy</Button>
+          <Button size="small" href={route}  variant='contained' style={{ background: '#3f51b5' }}>Buy</Button>
           <div className='actions'>
-            {role === 'ADMIN' ? <EditIcon onClick={modify} sx={{ fontSize: 'medium' }} /> : ''}
+            {role === 'ADMIN' ? <EditIcon sx={{ fontSize: 'medium' }} /> : ''}
             {role === 'ADMIN' ? <DeleteIcon onClick={handleClickOpen} sx={{ fontSize: 'medium' }} /> : ''}
           </div>
         </CardActions>
@@ -119,7 +97,6 @@ export default function MediaCard(props) {
           </Button>
         </DialogActions>
       </Dialog>
-      <ToastContainer theme="colored" autoClose={10000} hideProgressBar={false} pauseOnHover/>
     </div>
   );
 }

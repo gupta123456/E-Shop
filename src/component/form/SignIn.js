@@ -11,9 +11,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {pink} from '@mui/material/colors';
-import { toast, ToastContainer } from 'react-toastify';
-import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
+import { SuccessToast, ErrorToast } from "../../Common/Toasts/Toasts";
+
 
 function Copyright(props) {
   return (
@@ -33,6 +33,8 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function MySignIn() {
+
+
   const color = pink[500];
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -46,38 +48,20 @@ export default function MySignIn() {
 
   const userSignInRequest = async(signInRequestData) => {
     const SIGNIN_URL = "http://localhost:8080/api/auth/signin";
-    console.log("SignIn Data :: ");
-    console.log(signInRequestData);
     sessionStorage.setItem('user',signInRequestData.username);
     try{
       var response = await axios.post(SIGNIN_URL, signInRequestData);
-      console.log(response.data);
-      sessionStorage.setItem("token", response.data.token);
-      notify('success');
+      console.log(response.headers['x-auth-token'])
+      sessionStorage.setItem('token',response.headers['x-auth-token'])
+      SuccessToast('Login Successfully!')
       setTimeout(()=>{
         window.location.replace("/products");
       },300)
     }catch(err){
-      notify('error');
+      ErrorToast('Please check credentials')
     }
-    console.log("Session Storage Token :: "+ sessionStorage.getItem("token"));
   }
 
-  const notify = (str) => {
-    if (str === 'success') {
-      toast.success("Login Successfully!", {
-        position: toast.POSITION.TOP_RIGHT,
-        icon: false
-      });
-    }
-    if (str === 'error') {
-      toast.error("Please check credentials", {
-        position: toast.POSITION.TOP_RIGHT,
-        icon: false
-      });
-    }
-  }
- 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -137,7 +121,6 @@ export default function MySignIn() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-      <ToastContainer theme="colored" autoClose={10000} hideProgressBar={false} pauseOnHover/>
     </ThemeProvider>
   );
 }

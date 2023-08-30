@@ -1,31 +1,53 @@
 import * as React from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 export default function ColorToggleButton(props) {
+
   const [alignment, setAlignment] = React.useState('web');
-  // eslint-disable-next-line
+  const [data,setProductData] = React.useState()
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
 
+  useEffect(()=>{
+    getProducts()
+  },[])
+
+  var filteredData = [];
+
   const Products = props.data;
 
-  function filterData(event){
-    var filteredData = [];
-    var data = Products;
-    console.log(event.target.value,data);
-    for(var i=0;i<data.length;i++){
-        if(data[i].category===event.target.value){
-          filteredData.push(data[i]);
-        }
+  function filterData(event) {
+    console.log(event.target.value);
+    for (var i = 0; i < data.length; i++) {
+      if (data[i].category === event.target.value) {
+        filteredData.push(data[i]);
+      }
     }
-    console.log(filteredData);
+    console.log(filterData)
     props.updateData(filteredData);
   }
 
-  function allData(){
-    props.updateData(props.data);
+  function allData() {
+    props.updateData(data);
+  }
+
+  function getProducts() {
+    const token = sessionStorage.getItem('token');
+    const SIGNIN_URL = "http://localhost:8080/api/products";
+    const config = {
+      headers: { "x-auth-token":token }
+    };
+    try {
+      return axios.get(SIGNIN_URL, config).then((response) => {
+        setProductData(response.data)
+      })
+    } catch (err) {
+      console.log(err.response);
+    }
   }
 
   return (
@@ -37,10 +59,16 @@ export default function ColorToggleButton(props) {
       aria-label="Platform"
     >
       <ToggleButton value="all" onClick={allData}>All</ToggleButton>
-      <ToggleButton value="Apparel" onClick={filterData}>APPAREL</ToggleButton>
-      <ToggleButton value="Electronics" onClick={filterData}>ELECTRONICS</ToggleButton>
-      <ToggleButton value="Footware" onClick={filterData}>FOOTWARE</ToggleButton>
-      <ToggleButton value="Personal Care" onClick={filterData}>PERSONAL CARE</ToggleButton>
+      {Products.map((card, i) => {
+        return (
+          <div>
+            <ToggleButton
+              value={card} onClick={filterData}
+            >              {card.toUpperCase()}
+            </ToggleButton>
+          </div>
+        )
+      })}
     </ToggleButtonGroup>
   );
 }

@@ -11,8 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { pink } from '@mui/material/colors';
-import { toast, ToastContainer } from 'react-toastify';
-import "react-toastify/dist/ReactToastify.css";
+import { SuccessToast, ErrorToast } from "../../Common/Toasts/Toasts";
 import axios from 'axios';
 
 function Copyright(props) {
@@ -37,30 +36,16 @@ async function userRegistrationRequest(registrationRequestData) {
   try {
     var response = await axios.post(REGISTRATION_URL, registrationRequestData);
     console.log(response.data);
-    notify('success');
+    SuccessToast('SignUp Successfully!')
     setTimeout(() => {
       window.location.replace("/");
     }, 1000)
   } catch (err) {
-    notify('error');
+    ErrorToast('Please check credentials')
     console.log(err.response.data);
   }
 }
 
-const notify = (str) => {
-  if (str === 'success') {
-    toast.success("Signup Successfully!", {
-      position: toast.POSITION.TOP_RIGHT,
-      icon: false
-    });
-  }
-  if (str === 'error') {
-    toast.error("Please check credentials", {
-      position: toast.POSITION.TOP_RIGHT,
-      icon: false
-    });
-  }
-}
 
 const defaultTheme = createTheme();
 
@@ -75,9 +60,7 @@ export default function MyRegistration() {
       email: data.get('email'),
       password: data.get('password'),
       contactNumber: data.get('contactNumber'),
-      "role": [
-        "admin"
-      ]
+      "role": "ADMIN"
     };
     userRegistrationRequest(registrationRequestData);
   };
@@ -167,7 +150,7 @@ export default function MyRegistration() {
               sx={{ mt: 3, mb: 2 }}
               style={{ background: '#3f51b5' }}
             >
-              Sign In
+              Sign Up
             </Button>
             <Grid container>
               <Grid item>
@@ -180,7 +163,6 @@ export default function MyRegistration() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-      <ToastContainer theme="colored" autoClose={10000} hideProgressBar={false} pauseOnHover />
     </ThemeProvider>
   );
 }

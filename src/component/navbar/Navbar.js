@@ -12,18 +12,6 @@ import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import '../../assets/navbar.css';
 
-const token = sessionStorage.getItem('token');
-const role = sessionStorage.getItem('role');
-var checkLogIn = false;
-if(token){
-  checkLogIn = true;
-}
-
-const logout = () =>{
-  sessionStorage.clear();
-  window.location.replace("/");
-}
-
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -70,8 +58,24 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+export default function PrimarySearchAppBar(props) {
 
-export default function PrimarySearchAppBar() {
+  const token = sessionStorage.getItem('token')
+  const role = sessionStorage.getItem('role');
+  var checkLogIn = false;
+  if(token){
+    checkLogIn = true;
+  }
+
+  function logout (){
+    sessionStorage.clear();
+    window.location.replace("/");
+  }
+
+  function handleChange(event){
+    console.log(event.target.value);
+    props.updateSearch(event.target.value)
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -105,6 +109,7 @@ export default function PrimarySearchAppBar() {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
+              onKeyUp={handleChange}
             />
           </Search>
           </CenteredContent>
