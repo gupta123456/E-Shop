@@ -9,7 +9,7 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Navigate } from "react-router-dom";
 import axios from "axios";
 import PrimarySearchAppBar from '../navbar/Navbar';
 import "./Orders.css";
@@ -63,7 +63,7 @@ function Orders() {
           },
           {
             headers: {
-              'x-auth-token':token,
+              'x-auth-token': token,
             },
           }
         )
@@ -128,7 +128,7 @@ function Orders() {
       axios
         .post(`http://localhost:8080/api/addresses`, addressObj, {
           headers: {
-            'x-auth-token':token,
+            'x-auth-token': token,
           },
         })
         .then(() => {
@@ -137,7 +137,7 @@ function Orders() {
           axios
             .get(`http://localhost:8080/api/addresses`, {
               headers: {
-                'x-auth-token':token,
+                'x-auth-token': token,
               },
             })
             .then((response) => {
@@ -160,7 +160,7 @@ function Orders() {
       axios
         .get(`http://localhost:8080/api/addresses`, {
           headers: {
-            'x-auth-token':token,
+            'x-auth-token': token,
           },
         })
         .then((response) => {
@@ -200,11 +200,11 @@ function Orders() {
     </div>
   );
 
-  return (
+  return token ? (
     <div>
       <PrimarySearchAppBar />
       <Box className="orderContainer">
-        <Stepper activeStep={activeStep}>
+        <Stepper activeStep={activeStep} style={{ "backgroundColor": 'whitesmoke', padding: 25 }}>
           {steps.map((label) => {
             const stepProps = {};
             const labelProps = {};
@@ -215,6 +215,7 @@ function Orders() {
             );
           })}
         </Stepper>
+        <br></br>
         <Fragment>
           {activeStep === 0 ? (
             <div className="stepContainer1">
@@ -323,7 +324,7 @@ function Orders() {
                   />
                   <Button
                     variant="contained"
-                    color="primary"
+                    style={{ "background": '#3f51b5' }}
                     type="submit"
                     sx={{ mt: 2, width: "100%" }}
                     onClick={handleAddressSubmit}
@@ -334,7 +335,7 @@ function Orders() {
               </form>
             </div>
           ) : (
-            <div className="stepContainer3">
+            <div className="stepContainer3" style={{ 'backgroundColor': "whitesmoke" }}>
               {renderProductDetails()}
               <div>
                 <Typography gutterBottom variant="h5" component="p">
@@ -374,14 +375,16 @@ function Orders() {
             >
               Back
             </Button>
-            <Button variant="contained" onClick={handleNext}>
+            <Button variant="contained" onClick={handleNext} style={{ "background": '#3f51b5' }}>
               {activeStep === steps.length - 1 ? "Place Order" : "Next"}
             </Button>
           </Box>
         </Fragment>
       </Box>
     </div>
-  ) 
+  ) : (
+    <Navigate to='/login' />
+  )
 }
 
 export default Orders;

@@ -50,9 +50,24 @@ async function userRegistrationRequest(registrationRequestData) {
 const defaultTheme = createTheme();
 
 export default function MyRegistration() {
+
   const color = pink[500];
+
+  const [fnError, setFirstNameError] = React.useState(false)
+  const [lnError, setLasttNameError] = React.useState(false)
+  const [emailError, setEmailError] = React.useState(false)
+  const [passwordError, setpasswordError] = React.useState(false)
+  const [confirmpasswordError, setconfirmpasswordError] = React.useState(false)
+  const [contactError, setContactError] = React.useState(false)
+  
   const handleSubmit = (event) => {
     event.preventDefault();
+    setFirstNameError(false)
+    setLasttNameError(false)
+    setEmailError(false)
+    setpasswordError(false)
+    setContactError(false)
+    setconfirmpasswordError(false)
     const data = new FormData(event.currentTarget);
     var registrationRequestData = {
       firstName: data.get('firstName'),
@@ -62,7 +77,27 @@ export default function MyRegistration() {
       contactNumber: data.get('contactNumber'),
       "role": "ADMIN"
     };
-    userRegistrationRequest(registrationRequestData);
+    if(data.get('firstName') === ''){
+      setFirstNameError(true)
+    }
+    if(data.get('lastName') === ''){
+      setLasttNameError(true)
+    }
+    if(data.get('email') === ''){
+      setEmailError(true)
+    }
+    if(data.get('password') === ''){
+      setpasswordError(true)
+    }
+    if(data.get('confirmPassword') === ''){
+      setconfirmpasswordError(true)
+    }
+    if(data.get('contactNumber') === ''){
+      setContactError(true)
+    }
+    if(data.get('firstName') && data.get('lastName') && data.get('email') && data.get('password') && data.get('confirmPassword') && data.get('contactNumber')){
+      userRegistrationRequest(registrationRequestData);
+    }
   };
 
   return (
@@ -93,6 +128,7 @@ export default function MyRegistration() {
               name="firstName"
               autoComplete="first-name"
               autoFocus
+              error={fnError}
             />
             <TextField
               margin="normal"
@@ -103,6 +139,7 @@ export default function MyRegistration() {
               name="lastName"
               autoComplete="last-name"
               autoFocus
+              error={lnError}
             />
             <TextField
               margin="normal"
@@ -113,6 +150,7 @@ export default function MyRegistration() {
               name="email"
               autoComplete="email"
               autoFocus
+              error={emailError}
             />
             <TextField
               margin="normal"
@@ -123,6 +161,7 @@ export default function MyRegistration() {
               type="password"
               id="password"
               autoComplete="password"
+              error={passwordError}
             />
             <TextField
               margin="normal"
@@ -133,6 +172,7 @@ export default function MyRegistration() {
               type="password"
               id="confirmPassword"
               autoComplete="confirm-password"
+              error={confirmpasswordError}
             />
             <TextField
               margin="normal"
@@ -142,6 +182,7 @@ export default function MyRegistration() {
               label="Contact Number"
               id="contactNumber"
               autoComplete="contact-number"
+              error={contactError}
             />
             <Button
               type="submit"

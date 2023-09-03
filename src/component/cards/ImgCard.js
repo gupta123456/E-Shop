@@ -23,6 +23,8 @@ export default function MediaCard(props) {
 
   const [open, setOpen] = React.useState(false);
   const route = `/productDetails/${props.id}`
+  const editRoute = `modifyProduct/${props.id}`
+  sessionStorage.setItem('productId', props.id)
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,17 +34,21 @@ export default function MediaCard(props) {
     setOpen(false);
   };
 
+  function redirect() {
+    window.location.replace(editRoute)
+  }
+
   function deleteProduct() {
     const token = sessionStorage.getItem('token');
     const REGISTRATION_URL = `http://localhost:8080/api/products/${props.id}`;
     const config = {
-      headers: { 'x-auth-token':token },
+      headers: { 'x-auth-token': token },
     };
     try {
       axios.delete(REGISTRATION_URL, config).then(() => {
         handleClose();
         SuccessToast('Product deleted successfully')
-        window.location.replace('/dashboard');
+        window.location.replace('/products');
       })
     } catch (err) {
       ErrorToast('Please check')
@@ -56,23 +62,33 @@ export default function MediaCard(props) {
       <Card>
         <CardMedia
           component="img"
-          sx={{ height: 140 }}
+          sx={{ height: 160 }}
           image={props.imageUrl}
           title="Addidas"
         />
-        <CardContent>
-          <Typography gutterBottom variant="h6" component="div">
-            {props.heading}
-          </Typography>
+        <CardContent style={{ 'height': 140 }}>
+          <div style={{ 'display': 'block', 'justify-content': 'space-between', 'align-items': 'center' }}>
+            <Typography gutterBottom variant="h6" component="div">
+              {props.heading}
+            </Typography>
+            <Typography gutterBottom variant="h6" component="div">
+              ₹{props.price}
+            </Typography>
+          </div>
           <Typography variant="body2" color="text.secondary">
             {props.description}
           </Typography>
         </CardContent>
-        <CardActions>
-          <Button size="small" href={route}  variant='contained' style={{ background: '#3f51b5' }}>Buy</Button>
+        <CardActions sx={{
+          alignSelf: "stretch",
+          display: "flex",
+          justifyContent: role === 'ADMIN' ? "space-between" : "flex-start",
+          margin: "0 10px",
+        }}>
+          <Button size="small" href={route} variant='contained' style={{ background: '#3f51b5' }}>Buy</Button>
           <div className='actions'>
-            {role === 'ADMIN' ? <EditIcon sx={{ fontSize: 'medium' }} /> : ''}
-            {role === 'ADMIN' ? <DeleteIcon onClick={handleClickOpen} sx={{ fontSize: 'medium' }} /> : ''}
+            {role === 'ADMIN' ? <EditIcon onClick={redirect} sx={{ fontSize: 'medium', cursor: 'pointer' }} /> : ''}
+            {role === 'ADMIN' ? <DeleteIcon onClick={handleClickOpen} sx={{ fontSize: 'medium', cursor: 'pointer','margin-left':20 }} /> : ''}
           </div>
         </CardActions>
       </Card>

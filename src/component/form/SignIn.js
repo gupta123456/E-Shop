@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {pink} from '@mui/material/colors';
+import { pink } from '@mui/material/colors';
 import axios from 'axios';
 import { SuccessToast, ErrorToast } from "../../Common/Toasts/Toasts";
 
@@ -22,7 +22,7 @@ function Copyright(props) {
       <Link color="inherit" href="https://mui.com/">
         Upgrad
       </Link>{' '}
-      {new Date().getFullYear()-2}
+      {new Date().getFullYear() - 2}
       {'.'}
     </Typography>
   );
@@ -34,30 +34,43 @@ const defaultTheme = createTheme();
 
 export default function MySignIn() {
 
+  const [userError, setUserError] = React.useState(false)
+  const [passwordError, setpasswordError] = React.useState(false)
+
 
   const color = pink[500];
   const handleSubmit = (event) => {
     event.preventDefault();
+    setUserError(false)
+    setpasswordError(false)
     const data = new FormData(event.currentTarget);
     var signInRequestData = {
       username: data.get('email'),
       password: data.get('password'),
     };
-    userSignInRequest(signInRequestData);
+    if (data.get('email') === '') {
+      setUserError(true)
+    }
+    if (data.get('password') === '') {
+      setpasswordError(true)
+    }
+    if (data.get('email') && data.get('password')) {
+      userSignInRequest(signInRequestData);
+    }
   };
 
-  const userSignInRequest = async(signInRequestData) => {
+  const userSignInRequest = async (signInRequestData) => {
     const SIGNIN_URL = "http://localhost:8080/api/auth/signin";
-    sessionStorage.setItem('user',signInRequestData.username);
-    try{
+    sessionStorage.setItem('user', signInRequestData.username);
+    try {
       var response = await axios.post(SIGNIN_URL, signInRequestData);
       console.log(response.headers['x-auth-token'])
-      sessionStorage.setItem('token',response.headers['x-auth-token'])
+      sessionStorage.setItem('token', response.headers['x-auth-token'])
       SuccessToast('Login Successfully!')
-      setTimeout(()=>{
+      setTimeout(() => {
         window.location.replace("/products");
-      },300)
-    }catch(err){
+      }, 300)
+    } catch (err) {
       ErrorToast('Please check credentials')
     }
   }
@@ -90,6 +103,7 @@ export default function MySignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              error={userError}
             />
             <TextField
               margin="normal"
@@ -100,6 +114,7 @@ export default function MySignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              error={passwordError}
             />
             <Button
               type="submit"

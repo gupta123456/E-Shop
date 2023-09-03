@@ -8,48 +8,96 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import PrimarySearchAppBar from '../navbar/Navbar';
+import CreatableSelect from 'react-select/creatable';
+import { SuccessToast, ErrorToast } from "../../Common/Toasts/Toasts";
+
 
 // TODO remove, this demo shouldn't need to reset the theme.
-async function addProductRequest(addProductRequestData){
+async function addProductRequest(addProductRequestData) {
   const ADD_PRODUCT_URL = "http://localhost:8080/api/products";
+  const token = sessionStorage.getItem('token')
   console.log("Product Request Data :: ");
-  console.log(addProductRequestData);
-  /*
   const config = {
-    headers: { 'Content-Type' : 'application/json' }
+    headers: { "x-auth-token":token }
   };
-  */
-  try{
-    var response = await axios({
-      method: 'post',
-      url: ADD_PRODUCT_URL,
-      data: addProductRequestData
-    });
-    console.log(response.data);
-    window.location.replace('/products');
-  }catch(err){
-    console.log(err.response.data);
+  try {
+    var response = await axios.post(ADD_PRODUCT_URL, addProductRequestData,config);
+    console.log(response)
+    SuccessToast(`Product ${addProductRequestData.name} added successfully`)
+      setTimeout(() => {
+        window.location.replace("/products");
+      }, 300)
+    
+  } catch (err) {
+    ErrorToast(`Please check product details`)
   }
 }
+
 
 const defaultTheme = createTheme();
 
 export default function AddProduct() {
+
+  const [categoryList, setCategoryList] = React.useState([]);
+  const [category,setCategory] = React.useState()
+
+  const [nameError, setNameError] = React.useState(false);
+  const [manufacturerError, setManufacturerError] = React.useState(false);
+  const [availableItemsError, setAvailableItemsError] = React.useState(false);
+  const [priceError, setPriceError] = React.useState(false);
+
+  React.useEffect(() => {
+    getCategories()
+  },[])
+
+  function getCategories() {
+    const token = sessionStorage.getItem('token');
+    axios.get("http://localhost:8080/api/products/categories", {
+      headers: {
+        'x-auth-token': token,
+      },
+    })
+      .then(function (response) {
+        console.log(response.data)
+        setCategoryList(response.data);
+      })
+      .catch(function (err) {
+        console.log(err)
+      });
+  }
   const handleSubmit = (event) => {
     event.preventDefault();
+    setNameError(false)
+    setManufacturerError(false)
+    setAvailableItemsError(false)
+    setPriceError(false)
     const data = new FormData(event.currentTarget);
     var addProductRequestData = {
       "id": "12345",
-      "name": data.get("name"),
-      "category": data.get("category"),
-      "price": parseInt(data.get("price")),
-      "description": data.get("productDescription"),
-      "manufacturer": data.get("manufacturer"),
-      "availableItems": parseInt(data.get("availableItems")),
-      "imageUrl": data.get("imageURL")
+      "name": data.get('name'),
+      "category": category.value,
+      "price": data.get('price'),
+      "description": data.get('description'),
+      "manufacturer": data.get('manufacturer'),
+      "availableItems": data.get('availableItems'),
+      "imageUrl": data.get('imageUrl')
     };
+    if(data.get('name') === ''){
+      setNameError(true)
+    }
+    if(data.get('price') === ''){
+      setPriceError(true)
+    }
+    if(data.get('manufacturer') === ''){
+      setManufacturerError(true)
+    }
+    if(data.get('availableItems') === ''){
+      setAvailableItemsError(true)
+    }
     console.log(addProductRequestData);
-    addProductRequest(addProductRequestData);
+    if(data.get('name') && data.get('price') && data.get('manufacturer') && data.get('availableItems')){
+      addProductRequest(addProductRequestData);
+    }
   };
 
   return (
@@ -73,13 +121,27 @@ export default function AddProduct() {
               margin="normal"
               required
               fullWidth
-              id="name"
+              variant="outlined"
               label="Name"
               name="name"
-              autoComplete="name"
-              autoFocus
+              error={nameError}
             />
-            <TextField
+            <CreatableSelect
+              className="basic-single"
+              name="category"
+              fullWidth
+              margin='normal'
+              classNamePrefix="Category"
+              getOptionValue={(item) => item}
+              options={categoryList.map((item) => ({
+                label: item,
+                value: item,
+              }))}
+              isClearable
+              value={category}
+              onChange={(data) => setCategory(data)}
+            />
+            {/* <TextField
               margin="normal"
               required
               fullWidth
@@ -88,26 +150,25 @@ export default function AddProduct() {
               name="category"
               autoComplete="category"
               autoFocus
-            />
+            /> */}
             <TextField
               margin="normal"
               required
               fullWidth
-              id="manufacturer"
+              variant="outlined"
               label="Manufacturer"
               name="manufacturer"
-              autoComplete="manufacturer"
-              autoFocus
+              error={manufacturerError}
             />
             <TextField
               margin="normal"
               required
               fullWidth
               type='number'
+              variant="outlined"
               name="availableItems"
               label="Available Items"
-              id="availableItems"
-              autoComplete="availableItems"
+              error={availableItemsError}
             />
             <TextField
               margin="normal"
@@ -116,27 +177,23 @@ export default function AddProduct() {
               type='number'
               name="price"
               label="Price"
-              id="price"
-              autoComplete="price"
+              variant="outlined"
+              error={priceError}
             />
             <TextField
               margin="normal"
-              required
               fullWidth
               name="imageURL"
               label="Image URL"
-              id="imageURL"
-              autoComplete="imageURL"
+              variant="outlined"
             />
             <TextField
               margin="normal"
-              required
               fullWidth
               name="productDescription"
               label="Product Description"
-              id="productDescription"
-              autoComplete="productDescription"
-            />            
+              variant="outlined"
+            />
             <Button
               type="submit"
               fullWidth

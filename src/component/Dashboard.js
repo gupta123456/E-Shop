@@ -4,6 +4,7 @@ import MediaCard from "./cards/ImgCard.js";
 import BasicSelect from "./dropdown/Dropdown.js";
 import PrimarySearchAppBar from "./navbar/Navbar.js";
 import axios from 'axios';
+import { Navigate } from "react-router-dom";
 import "../assets/index.css";
 
 function Dashoard() {
@@ -11,15 +12,15 @@ function Dashoard() {
   const [originalData, setOriginalData] = useState([]);
   const [data, setData] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
-
+  const token = sessionStorage.getItem('token');
 
   function updateData(data) {
-     console.log("Updated Data :: ");
-     console.log(data);
-     setData(data);
+    console.log("Updated Data :: ");
+    console.log(data);
+    setData(data);
   }
 
-  function updateSearch(val){
+  function updateSearch(val) {
     const newData = originalData.filter((item) =>
       item.name.toLowerCase().includes(val.toLowerCase())
     );
@@ -39,11 +40,10 @@ function Dashoard() {
   }, [])
 
   function getUsers() {
-    const token = sessionStorage.getItem('token');
     const user = sessionStorage.getItem('user')
     const SIGNIN_URL = "http://localhost:8080/api/users";
     const config = {
-      headers: { 'x-auth-token':token }
+      headers: { 'x-auth-token': token }
     };
     try {
       return axios.get(SIGNIN_URL, config).then((response) => {
@@ -51,7 +51,7 @@ function Dashoard() {
         for (var i = 0; i < data.length; i++) {
           if (data[i].email === user) {
             sessionStorage.setItem('role', data[i].roles[0].name);
-            sessionStorage.setItem('userId',data[0].id)
+            sessionStorage.setItem('userId', data[0].id)
           }
         }
       })
@@ -61,10 +61,9 @@ function Dashoard() {
   }
 
   function getProducts() {
-    const token = sessionStorage.getItem('token');
     const SIGNIN_URL = "http://localhost:8080/api/products";
     const config = {
-      headers: { "x-auth-token":token }
+      headers: { "x-auth-token": token }
     };
     try {
       return axios.get(SIGNIN_URL, config).then((response) => {
@@ -77,34 +76,32 @@ function Dashoard() {
     }
   }
 
-  function getCategories(){
-    const token = sessionStorage.getItem('token');
+  function getCategories() {
     axios.get("http://localhost:8080/api/products/categories", {
-          headers: {
-            'x-auth-token':token,
-          },
-        })
-        .then(function (response) {
-          console.log(response.data)
-          setCategoryList(response.data);
-        })
-        .catch(function (err) {
-          console.log(err)
-        });
+      headers: {
+        'x-auth-token': token,
+      },
+    })
+      .then(function (response) {
+        console.log(response.data)
+        setCategoryList(response.data);
+      })
+      .catch(function (err) {
+        console.log(err)
+      });
   }
 
-  return (
+  return   token ? (
     <div style={{ margin: 0 }}>
-      <PrimarySearchAppBar updateSearch={updateSearch}/>
+      <PrimarySearchAppBar updateSearch={updateSearch} />
       <div style={{ marginTop: "1em", textAlign: "center" }}>
         <ColorToggleButton data={categoryList} updateData={updateData} />
       </div>
       <div style={{ marginLeft: "2em", width: "10em" }}>
         <BasicSelect data={originalData} updateData={updateData} />
       </div>
-
       <div style={{ margin: "2em", display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "2em" }}>
-        {data.map((card,i) => {
+        {data.map((card, i) => {
           return (
             <div>
               <MediaCard
@@ -120,7 +117,9 @@ function Dashoard() {
         })}
       </div>
     </div>
-  );
+  ) : (
+    <Navigate to='/login'/>
+  )
 }
 
 export default Dashoard;
