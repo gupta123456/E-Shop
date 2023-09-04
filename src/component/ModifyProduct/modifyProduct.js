@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {useState,useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -20,10 +20,10 @@ const defaultTheme = createTheme();
 export default function AddProduct() {
 
   const [categoryList, setCategoryList] = useState([]);
-  const [category,setCategory] = useState()
+  const [category, setCategory] = useState()
   const token = sessionStorage.getItem('token');
 
-  const {id } = useParams();
+  const { id } = useParams();
 
 
   const [nameError, setNameError] = useState(false);
@@ -39,34 +39,39 @@ export default function AddProduct() {
   const [productDescription, setProductDescription] = useState("");
 
   useEffect(() => {
-    getCategories()
-  },[])
+    getData()
+  }, [])
 
-  useEffect(() => {
-    getProductDetails()
-  },[])
+  function getData(){
+    if(token){
+      getCategories();
+      getProductDetails();
+    }
+    else{
+      window.location.replace('/login');
+    }
+  }
 
   async function modifyProductRequest(modifyProductRequestData) {
     const ADD_PRODUCT_URL = `http://localhost:8080/api/products/${id}`;
-    const token = sessionStorage.getItem('token')
     console.log("Product Request Data :: ");
     const config = {
-      headers: { "x-auth-token":token }
+      headers: { "x-auth-token": token }
     };
     try {
-      var response = await axios.put(ADD_PRODUCT_URL, modifyProductRequestData,config);
+      var response = await axios.put(ADD_PRODUCT_URL, modifyProductRequestData, config);
       console.log(response)
       SuccessToast(`Product ${modifyProductRequestData.name} added successfully`)
-        setTimeout(() => {
-          window.location.replace("/products");
-        }, 300)
-      
+      setTimeout(() => {
+        window.location.replace("/products");
+      }, 300)
+
     } catch (err) {
       ErrorToast(`Please check product details`)
     }
   }
 
-  function getProductDetails(){
+  function getProductDetails() {
     const id = sessionStorage.getItem('productId')
     axios
       .get(`http://localhost:8080/api/products/${id}`, {
@@ -76,14 +81,14 @@ export default function AddProduct() {
       })
       .then((response) => {
         const data = response.data;
-          setName(data.name);
-          const categoryName = data.category;
-          setCategory({ label: categoryName, value: categoryName });
-          setManufacturer(data.manufacturer);
-          setAvailableItems(data.availableItems);
-          setPrice(data.price);
-          setImageUrl(data.imageUrl);
-          setProductDescription(data.description);
+        setName(data.name);
+        const categoryName = data.category;
+        setCategory({ label: categoryName, value: categoryName });
+        setManufacturer(data.manufacturer);
+        setAvailableItems(data.availableItems);
+        setPrice(data.price);
+        setImageUrl(data.imageUrl);
+        setProductDescription(data.description);
       })
   }
 
@@ -101,6 +106,7 @@ export default function AddProduct() {
         console.log(err)
       });
   }
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     setNameError(false)
@@ -108,29 +114,29 @@ export default function AddProduct() {
     setAvailableItemsError(false)
     setPriceError(false)
     var modifyProductRequestData = {
-      "id":id,
+      "id": id,
       "name": name,
       "category": category.value,
       "price": parseInt(price),
       "description": productDescription,
       "manufacturer": manufacturer,
-      "availableItems":availableItems ,
-      "imageUrl":imageUrl
+      "availableItems": availableItems,
+      "imageUrl": imageUrl
     };
-    if(name === ''){
+    if (name === '') {
       setNameError(true)
     }
-    if(price === ''){
+    if (price === '') {
       setPriceError(true)
     }
-    if(manufacturer === ''){
+    if (manufacturer === '') {
       setManufacturerError(true)
     }
-    if(availableItems === ''){
+    if (availableItems === '') {
       setAvailableItemsError(true)
     }
     console.log(modifyProductRequestData);
-    if(name && price && manufacturer && availableItems){
+    if (name && price && manufacturer && availableItems) {
       modifyProductRequest(modifyProductRequestData);
     }
   };

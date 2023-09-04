@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import ColorToggleButton from "./toggle/toggleFilter.js";
 import MediaCard from "./cards/ImgCard.js";
@@ -28,16 +29,20 @@ function Dashoard() {
   }
 
   useEffect(() => {
-    getUsers();
+    getData()
   }, [])
 
-  useEffect(() => {
-    getProducts();
-  }, [])
+  function getData() {
+    if (token) {
+      getUsers();
+      getProducts();
+      getCategories();
+    }
+    else {
+      window.location.replace('/login')
+    }
+  }
 
-  useEffect(() => {
-    getCategories();
-  }, [])
 
   function getUsers() {
     const user = sessionStorage.getItem('user')
@@ -91,7 +96,7 @@ function Dashoard() {
       });
   }
 
-  return   token ? (
+  return token ? (
     <div style={{ margin: 0 }}>
       <PrimarySearchAppBar updateSearch={updateSearch} />
       <div style={{ marginTop: "1em", textAlign: "center" }}>
@@ -100,25 +105,29 @@ function Dashoard() {
       <div style={{ marginLeft: "2em", width: "10em" }}>
         <BasicSelect data={originalData} updateData={updateData} />
       </div>
-      <div style={{ margin: "2em", display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "2em" }}>
-        {data.map((card, i) => {
-          return (
-            <div>
-              <MediaCard
-                key={i}
-                id={card.id}
-                heading={card.name}
-                imageUrl={card.imageUrl}
-                description={card.description}
-                price={card.price}
-              />
-            </div>
-          )
-        })}
-      </div>
+      {data.length > 0 ? (
+        <div style={{ margin: "2em", display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "2em" }}>
+          {data.map((card, i) => {
+            return (
+              <div>
+                <MediaCard
+                  key={i}
+                  id={card.id}
+                  heading={card.name}
+                  imageUrl={card.imageUrl}
+                  description={card.description}
+                  price={card.price}
+                />
+              </div>
+            )
+          })}
+        </div>
+      ) : (
+        <div style={{ margin: "2em", display: "flex", flexDirection: "row", flexWrap: "wrap", gap: "2em" }}>There are no products available</div>
+      )}
     </div>
   ) : (
-    <Navigate to='/login'/>
+    <Navigate to='/login' />
   )
 }
 

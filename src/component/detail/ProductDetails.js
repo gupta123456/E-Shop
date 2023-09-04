@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Chip, Grid, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -16,15 +17,20 @@ export default function ProductDetails() {
   }, []);
 
   function getProductDetails() {
-    axios
-      .get(`http://localhost:8080/api/products/${id}`, {
-        headers: {
-          'x-auth-token': token,
-        },
-      })
-      .then((response) => {
-        setData(response.data);
-      })
+    if (token) {
+      axios
+        .get(`http://localhost:8080/api/products/${id}`, {
+          headers: {
+            'x-auth-token': token,
+          },
+        })
+        .then((response) => {
+          setData(response.data);
+        })
+    }
+    else {
+      window.location.replace('/login');
+    }
   }
 
   function handleChange(event) {

@@ -168,6 +168,9 @@ function Orders() {
         })
         .catch((error) => console.error("Error fetching data:", error));
     }
+    else{
+      window.location.replace('/login');
+    }
   }, [token]);
 
   const renderProductDetails = () => (

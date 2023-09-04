@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -18,16 +19,16 @@ async function addProductRequest(addProductRequestData) {
   const token = sessionStorage.getItem('token')
   console.log("Product Request Data :: ");
   const config = {
-    headers: { "x-auth-token":token }
+    headers: { "x-auth-token": token }
   };
   try {
-    var response = await axios.post(ADD_PRODUCT_URL, addProductRequestData,config);
+    var response = await axios.post(ADD_PRODUCT_URL, addProductRequestData, config);
     console.log(response)
     SuccessToast(`Product ${addProductRequestData.name} added successfully`)
-      setTimeout(() => {
-        window.location.replace("/products");
-      }, 300)
-    
+    setTimeout(() => {
+      window.location.replace("/products");
+    }, 300)
+
   } catch (err) {
     ErrorToast(`Please check product details`)
   }
@@ -39,32 +40,38 @@ const defaultTheme = createTheme();
 export default function AddProduct() {
 
   const [categoryList, setCategoryList] = React.useState([]);
-  const [category,setCategory] = React.useState()
+  const [category, setCategory] = React.useState()
 
   const [nameError, setNameError] = React.useState(false);
   const [manufacturerError, setManufacturerError] = React.useState(false);
   const [availableItemsError, setAvailableItemsError] = React.useState(false);
   const [priceError, setPriceError] = React.useState(false);
+  const token = sessionStorage.getItem('token');
 
   React.useEffect(() => {
-    getCategories()
-  },[])
+    getCategories();
+  }, [])
 
   function getCategories() {
-    const token = sessionStorage.getItem('token');
-    axios.get("http://localhost:8080/api/products/categories", {
-      headers: {
-        'x-auth-token': token,
-      },
-    })
-      .then(function (response) {
-        console.log(response.data)
-        setCategoryList(response.data);
+    if (token) {
+      axios.get("http://localhost:8080/api/products/categories", {
+        headers: {
+          'x-auth-token': token,
+        },
       })
-      .catch(function (err) {
-        console.log(err)
-      });
+        .then(function (response) {
+          console.log(response.data)
+          setCategoryList(response.data);
+        })
+        .catch(function (err) {
+          console.log(err)
+        });
+    }
+    else{
+      window.location.replace('/login')
+    }
   }
+
   const handleSubmit = (event) => {
     event.preventDefault();
     setNameError(false)
@@ -82,20 +89,20 @@ export default function AddProduct() {
       "availableItems": data.get('availableItems'),
       "imageUrl": data.get('imageUrl')
     };
-    if(data.get('name') === ''){
+    if (data.get('name') === '') {
       setNameError(true)
     }
-    if(data.get('price') === ''){
+    if (data.get('price') === '') {
       setPriceError(true)
     }
-    if(data.get('manufacturer') === ''){
+    if (data.get('manufacturer') === '') {
       setManufacturerError(true)
     }
-    if(data.get('availableItems') === ''){
+    if (data.get('availableItems') === '') {
       setAvailableItemsError(true)
     }
     console.log(addProductRequestData);
-    if(data.get('name') && data.get('price') && data.get('manufacturer') && data.get('availableItems')){
+    if (data.get('name') && data.get('price') && data.get('manufacturer') && data.get('availableItems')) {
       addProductRequest(addProductRequestData);
     }
   };
@@ -141,16 +148,6 @@ export default function AddProduct() {
               value={category}
               onChange={(data) => setCategory(data)}
             />
-            {/* <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="category"
-              label="category"
-              name="category"
-              autoComplete="category"
-              autoFocus
-            /> */}
             <TextField
               margin="normal"
               required

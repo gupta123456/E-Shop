@@ -7,8 +7,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import PlaceOrder from "./component/PlaceOrder/placeOrder";
 import AddProduct from "./component/AddProduct/addProduct";
 import ModifyProduct from './component/ModifyProduct/modifyProduct';
-import Address from "./component/Address/Address";
-import AddAddress from "./component/AddAddress/addAddress";
 
 const App = () => {
   return (
@@ -22,8 +20,6 @@ const App = () => {
         <Route exact path="/productDetails/:id" element={<Details />} />
         <Route exact path="/addProduct" element={<AddProduct />} />
         <Route exact path="/modifyProduct/:id" element={<ModifyProduct />} />
-        <Route exact path="/Address" element={<Address />} />
-        <Route exact path="/AddAddress" element={<AddAddress />} />
       </Routes>
     </BrowserRouter>
   );
